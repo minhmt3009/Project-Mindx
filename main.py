@@ -82,12 +82,15 @@ def filter_all():
 @app.route('/api/search')
 def search():
     try:
-        trackid = request.args.get('id', type = str)
-        song = request.args.get('song', type = str)
-        result = []
+        trackid = request.args.get('id',   type = str)
+        song    = request.args.get('song', type = str)
+        result  = []
 
-        if not any ([trackid, song]):
+        if not any([trackid, song]):
             return jsonify({'error': 'Vui lòng nhập ID hoặc tên bài nhạc'}), 400
+
+        if trackid and song:
+            return jsonify({'error': 'Chỉ được tìm bằng ID hoặc tên bài, không được dùng cả hai'}), 400
 
         if trackid:
             x = get_trackid(trackid)
@@ -99,7 +102,7 @@ def search():
             y = get_song(song)
             if isinstance(y, dict) and 'error' in y:
                 return jsonify(y), 404
-            result = [r for r in result if r in y] if result else y 
+            result = y
 
         return jsonify(result), 200
 
