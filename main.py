@@ -9,15 +9,43 @@ from data_processing import (get_all_track,
                         filter_by_genre, 
                         filter_by_year, 
                         filter_by_label, 
-                        filter_by_country, 
+                        filter_by_country,
+                        filter_by_loudness, 
                         get_trackid, 
-                        get_song
-)
+                        get_song)
 
+from data_handle import (new_track)
+
+
+
+# Chia page
 @app.route('/api/all')
+def all_data():
+    try:
+        page     = request.args.get('page',     default=1,    type=int)
+        per_page = request.args.get('per_page', default=50,   type=int)
+
+        start = (page - 1) * per_page
+        end   = start + per_page
+
+        chunk   = df.iloc[start:end].copy()
+        records = [safe_dict(r) for r in chunk.to_dict(orient='records')]
+
+        return jsonify({
+            'total':    len(df),
+            'page':     page,
+            'per_page': per_page,
+            'data':     records
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+# Trả danh sách toàn bộ bài hát
+@app.route('/api/summary')
 def all():
     return jsonify(get_all_track())
-
 
 
 
@@ -29,12 +57,13 @@ def filter_all():
         artist = request.args.get('artist', type = str)
         year   = request.args.get('year',   type = int)
         label  = request.args.get('label',  type = str)
-        country= request.args.get('country',type = str)
+        country = request.args.get('country',type = str)
+        loudness = request.args.get('country',type = str)
 
         if 'year' in request.args and year is None:
             return jsonify({'error': 'Không hợp lệ, vui lòng nhập đúng định dạng'}), 400 
 
-        if not any([genre, artist, year, label, country]):
+        if not any([genre, artist, year, label, country, loudness]):
             return jsonify({'error': 'Vui lòng nhập ít nhất 1 tham số: genre, artist, year'}), 400
 
 
@@ -66,9 +95,15 @@ def filter_all():
 
         if label:
             e = filter_by_label(label)
-            if isinstance(e, dict) and 'error' in c:
+            if isinstance(e, dict) and 'error' in e:
                 return jsonify(e), 404
             result = [r for r in result if r in e] if result else e  # nếu result trống thì gắn giá trị từ e
+
+        if loudness:
+            f = filter_by_loudness(loudness)
+            if isinstance(f, dict) and 'error' in f:
+                return jsonify(f), 404
+            result = [r for r in result if r in f] if result else f
 
 
         return jsonify(result), 200
@@ -108,6 +143,32 @@ def search():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+# Thêm mới
+@app.route('/api/new')
+def add():
+    global df
+    try:
+        data = request.get_json(force = True, silent = True)
+        if not data:
+            return jsonify({'error': 'Vui lòng nhập dữ liệu'}), 400
+        
+        new_song = new_track()
+        new_data = {
+            'track_id': new_song,
+            'track_name': data.get('track_name'),
+            'artist_name': data.get('artist_name'),
+            'genre': data.get('genre') or 'Unknown',
+            'country': data.get('country') or 'Unknown',
+            'label': data.get('label') or 'Unknown',
+            'loudness_category': data.get('loudness_category') or 'Unknown',
+            'duration_ms': data.get('duration_ms') or 0,
+            'popularity': data.get('popularity') or 50,
+            'stream_count': data.get('stream_count') or 1000,
+        }
+
 
         
 

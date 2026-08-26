@@ -47,6 +47,14 @@ def filter_by_country(country):
     return result.to_dict(orient = 'records')
 
 
+# Lấy danh sách theo độ ồn
+def filter_by_loudness(loudness):
+    if loudness.lower() not in df['loudness_category'].str.lower().values:
+        return {'error': 'Không tồn tại'}
+    result = df[df['loudness_category'].str.lower() == loudness.lower()]
+    return result.to_dict(orient = 'records')
+
+
 # Lấy bài hát qua track_id
 def get_trackid(trackid):
     if trackid.lower() not in df['track_id'].str.lower().values:
@@ -61,6 +69,9 @@ def get_song(song):
         return {'error': 'Không có bài hát này'}
     result = df[df['track_name'].str.lower() == song.lower()]
     return result.to_dict(orient = 'records')
+
+
+# 
 
 
 
