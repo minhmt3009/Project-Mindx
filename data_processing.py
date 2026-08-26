@@ -47,3 +47,20 @@ def filter_by_country(country):
     return result.to_dict(orient = 'records')
 
 
+# Lấy bài hát qua track_id
+def get_trackid(trackid):
+    if trackid.lower() not in df['track_id'].str.lower().values:
+        return {'error': 'Không tồn tại ID'}
+    result = df[df['track_id'].str.lower() == trackid.lower()]
+    return result.to_dict(orient = 'records')
+
+
+# Lấy bài hát qua tên bài
+def get_song(song):
+    if song.lower() not in df['track_name'].str.lower().values:
+        return {'error': 'Không có bài hát này'}
+    result = df[df['track_name'].str.lower() == song.lower()]
+    return result.to_dict(orient = 'records')
+
+
+

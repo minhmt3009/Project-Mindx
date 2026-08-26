@@ -4,7 +4,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from data_processing import (get_all_track, filter_by_artist, filter_by_genre, filter_by_year, filter_by_label, filter_by_country)
+from data_processing import (get_all_track, 
+                        filter_by_artist, 
+                        filter_by_genre, 
+                        filter_by_year, 
+                        filter_by_label, 
+                        filter_by_country, 
+                        get_trackid, 
+                        get_song
+)
 
 @app.route('/api/all')
 def all():
@@ -13,9 +21,7 @@ def all():
 
 
 
-# Query kết hợp nhiều tham số — genre, artist, year đều optional
-# Ví dụ: /api/filter?genre=pop&year=2020
-#         /api/filter?artist=Ed+Sheeran&genre=pop
+# Query kết hợp nhiều tham số — genre, artist, year đều optional => Lọc theo category
 @app.route('/api/filter')
 def filter_all():
     try:
@@ -69,6 +75,39 @@ def filter_all():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+# Tìm kiếm theo yêu cầu (track_id, tên bài hát)
+@app.route('/api/search')
+def search():
+    try:
+        trackid = request.args.get('id', type = str)
+        song = request.args.get('song', type = str)
+        result = []
+
+        if not any ([trackid, song]):
+            return jsonify({'error': 'Vui lòng nhập ID hoặc tên bài nhạc'}), 400
+
+        if trackid:
+            x = get_trackid(trackid)
+            if isinstance(x, dict) and 'error' in x:
+                return jsonify(x), 404
+            result = x
+
+        if song:
+            y = get_song(song)
+            if isinstance(y, dict) and 'error' in y:
+                return jsonify(y), 404
+            result = [r for r in result if r in y] if result else y 
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+        
+
 
 
 if __name__ == '__main__':
