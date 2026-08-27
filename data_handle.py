@@ -3,7 +3,7 @@ df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_pro
 from datetime import date
 
 # Tự generate track id
-def new_trackid(df):
+def new_trackid(df: pd.DataFrame):
     if df.empty:
         return 'TRK-00001'
 
@@ -16,7 +16,7 @@ default_values = {'album_name':'', 'duration_ms': 0, 'popularity': 50, 'stream_c
 required_values = ['track_name', 'artist_name', 'genre', 'country', 'label', 'loudness_category', 'release_date']
 
 
-# 
+# Định dạng DATE
 def parse_new_date(data: dict) -> pd.Timestamp:
     new_date = data.get('release_date')
 
@@ -57,5 +57,19 @@ def create_new_track (data: dict, df: pd.DataFrame) -> dict:
     }
 
     return new_track_song
+
+
+
+# Xóa bài hát
+def delete_track(df: pd.DataFrame, track_id: str):
+    if trackid.lower() not in df['track_id'].str.lower().values:
+        return {'error': 'Không tồn tại ID'}
+
+    del_id = df.index[df['track_id'].str.lower() == track_id.lower()]
+    if del_id.empty:
+        return {'error': 'Không tìm thấy ID '}
+
+    df = df.drop(index=del_id[0]).reset_index(drop=True)
+    return df
 
     

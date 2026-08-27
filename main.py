@@ -16,7 +16,9 @@ from data_processing import (get_all_track,
                         get_trackid, 
                         get_song)
 
-from data_handle import (create_new_track)
+from data_handle import (create_new_track,
+                    delete_track
+                    )
 
 
 
@@ -72,37 +74,37 @@ def filter_all():
         result = []
 
         if genre:
-            a = filter_by_genre(genre)
+            a = filter_by_genre(df, genre)
             if isinstance(a, dict) and 'error' in a:
                 return jsonify(a), 404
             result = a  # gắn giá trị từ a
 
         if year:
-            b = filter_by_year(year)
+            b = filter_by_year(df, year)
             if isinstance(b, dict) and 'error' in b:
                 return jsonify(b), 404
             result = [r for r in result if r in b] if result else b  # nếu result trống thì gắn giá trị từ b
 
         if artist:
-            c = filter_by_artist(artist)
+            c = filter_by_artist(df, artist)
             if isinstance(c, dict) and 'error' in c:
                 return jsonify(c), 404
             result = [r for r in result if r in c] if result else c  # nếu result trống thì gắn giá trị từ c
 
         if country:
-            d = filter_by_country(country)
+            d = filter_by_country(df, country)
             if isinstance(d, dict) and 'error' in d:
                 return jsonify(d), 404
             result = [r for r in result if r in d] if result else d  # nếu result trống thì gắn giá trị từ d
 
         if label:
-            e = filter_by_label(label)
+            e = filter_by_label(df, label)
             if isinstance(e, dict) and 'error' in e:
                 return jsonify(e), 404
             result = [r for r in result if r in e] if result else e  # nếu result trống thì gắn giá trị từ e
 
         if loudness:
-            f = filter_by_loudness(loudness)
+            f = filter_by_loudness(df, loudness)
             if isinstance(f, dict) and 'error' in f:
                 return jsonify(f), 404
             result = [r for r in result if r in f] if result else f
@@ -130,13 +132,13 @@ def search():
             return jsonify({'error': 'Chỉ được tìm bằng ID hoặc tên bài, không được dùng cả hai'}), 400
 
         if trackid:
-            x = get_trackid(trackid)
+            x = get_trackid(df, trackid)
             if isinstance(x, dict) and 'error' in x:
                 return jsonify(x), 404
             result = x
 
         if song:
-            y = get_song(song)
+            y = get_song(df, song)
             if isinstance(y, dict) and 'error' in y:
                 return jsonify(y), 404
             result = y
@@ -164,7 +166,24 @@ def add():
     
     df = pd.concat([df, pd.DataFrame([new_song])], ignore_index = True)
     return jsonify({'message': 'Đã thêm mới thành công'}), 201
-   
+
+
+
+# Xóa
+@app.route('/api/remove', methods = ['DELETE'])
+def remove():
+    global df
+    track_id = request.args.get('id',   type = str)
+    try: 
+        remove_song = delete_track(df, track_id)
+        if isinstance(remove_song, dict) and 'error' in remove_song:
+            return jsonify(remove_song), 400
+
+        return jsonify({'message': 'Đã xóa thành công'}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 
 
         
