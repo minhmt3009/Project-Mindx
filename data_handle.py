@@ -1,8 +1,9 @@
 import pandas as pd
 df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
+from datetime import date
 
-# Thêm bài hát mới => tự generate track id
-def new_track():
+# Tự generate track id
+def new_trackid(df):
     if df.empty:
         return 'TRK-00001'
 
@@ -10,3 +11,51 @@ def new_track():
     next_number = numeric_parts.max() + 1
     
     return f"TRK-{next_number:05d}" 
+
+default_values = {'album_name':'', 'duration_ms': 0, 'popularity': 50, 'stream_count':1000 }
+required_values = ['track_name', 'artist_name', 'genre', 'country', 'label', 'loudness_category', 'release_date']
+
+
+# 
+def parse_new_date(data: dict) -> pd.Timestamp:
+    new_date = data.get('release_date')
+
+    if not new_date:
+        # Không nhập thì mặc định hôm nay
+        return pd.Timestamp(date.today())
+
+    try:
+        return pd.to_datetime(new_date)
+    except (ValueError, TypeError):
+        return {'error': release_date}
+
+
+
+# Tạo dữ liệu mới
+def create_new_track (data: dict, df: pd.DataFrame) -> dict:
+    missing = [f for f in required_values if not data.get(f)]
+    if missing:
+        return {'error': f'Thiếu trường bắt buộc: {missing}'}
+
+
+    new_id = new_trackid(df)
+    release_date = parse_new_date(data)
+
+    new_track_song = {
+        'track_id': new_id,
+        'track_name': data.get('track_name'),
+        'artist_name': data.get('artist_name'),
+        'country': data.get('country') or '',
+        'label': data.get('label') or 'Unknown',
+        'genre': data.get('genre') or 'Unknown',
+        'loudness_category': data.get('loudness_category') or 'Moderate',
+        'release_date': release_date.strftime('%Y-%m-%d'),
+        'release_year': release_date.year,
+        'release_month': release_date.month,
+        'release_day_of_week': release_date.day_name(),
+        **default_values
+    }
+
+    return new_track_song
+
+    

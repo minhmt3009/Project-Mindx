@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory 
 from flask_cors import CORS
+import pandas as pd 
+df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
 
 app = Flask(__name__)
 CORS(app)
@@ -14,7 +16,7 @@ from data_processing import (get_all_track,
                         get_trackid, 
                         get_song)
 
-from data_handle import (new_track)
+from data_handle import (create_new_track)
 
 
 
@@ -147,27 +149,22 @@ def search():
 
 
 # Thêm mới
-@app.route('/api/new')
+@app.route('/api/new', methods = ['POST'])
 def add():
     global df
+    data = request.get_json()
+
     try:
-        data = request.get_json(force = True, silent = True)
-        if not data:
-            return jsonify({'error': 'Vui lòng nhập dữ liệu'}), 400
-        
-        new_song = new_track()
-        new_data = {
-            'track_id': new_song,
-            'track_name': data.get('track_name'),
-            'artist_name': data.get('artist_name'),
-            'genre': data.get('genre') or 'Unknown',
-            'country': data.get('country') or 'Unknown',
-            'label': data.get('label') or 'Unknown',
-            'loudness_category': data.get('loudness_category') or 'Unknown',
-            'duration_ms': data.get('duration_ms') or 0,
-            'popularity': data.get('popularity') or 50,
-            'stream_count': data.get('stream_count') or 1000,
-        }
+        new_song = create_new_track(data, df)
+        if isinstance(new_song, dict) and 'error' in new_song:
+            return jsonify(new_song), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    df = pd.concat([df, pd.DataFrame([new_song])], ignore_index = True)
+    return jsonify({'message': 'Đã thêm mới thành công'}), 201
+   
 
 
         
