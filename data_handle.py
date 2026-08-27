@@ -72,4 +72,20 @@ def delete_track(df: pd.DataFrame, track_id: str):
     df = df.drop(index=del_id[0]).reset_index(drop=True)
     return df
 
-    
+
+
+# Tìm top lượt stream cao và thấp nhất
+def get_top_track(df: pd.DataFrame, top: int):
+    default_cols = ['genre', 'country', 'label', 'track_id', 'track_name', 'artist_name', 'release_date', 'stream_count']
+    highest = df.nlargest(top, 'stream_count')[default_cols].reset_index(drop=True)
+  
+    return highest.to_dict(orient = 'records')
+
+
+
+def get_bottom_track(df: pd.DataFrame, bot: int):
+    default_cols = ['genre', 'country', 'label', 'track_id', 'track_name', 'artist_name', 'release_date', 'stream_count']
+    lowest = df.nsmallest(bot, 'stream_count')[default_cols].reset_index(drop=True)
+
+    return lowest.to_dict(orient = 'records')
+        

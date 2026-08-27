@@ -17,7 +17,9 @@ from data_processing import (get_all_track,
                         get_song)
 
 from data_handle import (create_new_track,
-                    delete_track
+                    delete_track,
+                    get_top_track,
+                    get_bottom_track
                     )
 
 
@@ -182,9 +184,38 @@ def remove():
         return jsonify({'message': 'Đã xóa thành công'}), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 
+
+@app.route('/api/streamcount')
+def top_stream():
+    try:
+        top = request.args.get('top', type = int)
+        bot = request.args.get('bot', type = int)
+
+        if top is None and bot is None:
+            return jsonify({'error': 'Vui lòng chọn một'})
+        if top is not None or top < 1 or top > len(df):
+            return jsonify({'error': 'top phải là số nguyên lớn hơn 0'}), 400
+        if bot is not None or bot < 1 or bot > len(df):
+            return jsonify({'error': 'bot phải là số nguyên lớn hơn 0'}), 400
+        
+
+        result = {}
+
+        tp = get_top_track(df, top)
+        if top is not None:
+            result['highest'] = tp
+
+        bm = get_bottom_track(df, bot)
+        if bot is not None:
+            result['lowest'] = bm
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
         
 
