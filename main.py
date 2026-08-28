@@ -21,7 +21,10 @@ from data_handle import (create_new_track,
                     get_top_track,
                     get_bottom_track,
                     get_top_popularity,
-                    top_genre
+                    top_genre,
+                    top_year,
+                    avg_pop,
+                    classify
                     )
 
 
@@ -238,7 +241,7 @@ def popularity():
 
 
 # Tính tổng streamcount theo genre, sau đó xếp hạng
-@app.route('/api/genrerank')
+@app.route('/api/genrecountcrank')
 def genre_assess():
     try:
         top = request.args.get('top', type = int)
@@ -251,7 +254,34 @@ def genre_assess():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+    
+# Tính tổng streamcount theo năm, sau đó xếp hạng
+@app.route('/api/yearcountrank')
+def year_assess():
+    try:
+        top = request.args.get('top', type = int)
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400
+
+        result = top_year(df, top)
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+# Tính popularity trung bình của genre, sau đó phân loại
+@app.route('/api/poprank') 
+def ranking():
+    try:
+        result = avg_pop(df)
+        return jsonify(result), 200
         
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+   
 
 
 

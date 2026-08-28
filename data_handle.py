@@ -104,8 +104,46 @@ def top_genre(df: pd.DataFrame, top: int = None):
     if top is not None:
         genrecount = genrecount.nlargest(top, 'stream_count')
     return genrecount.to_dict(orient = 'records')
+
+
+
+# Tổng streamcount theo năm
+def top_year(df: pd.DataFrame, top: int = None):
+    yearcount = (df.groupby('year')['stream_count']
+            .sum()
+            .reset_index()
+            .sort_values('stream_count', ascending = False)
+            .reset_index(drop = True)
+            )
     
-    
+    if top is not None:
+        yearcount = yearcount.nlargest(top, 'stream_count')
+    return yearcount.to_dict(orient = 'records')
+
+
+
+# Độ popularity trung bình theo genre => phân chia thành các loại: Very popular, popular, unpopular 
+def classify(score):
+    if score >= 70:
+        return 'Very popular'
+    elif score >= 40:
+        return 'Popular'
+    else:
+        return 'Unpopular'
+
+
+def avg_pop(df: pd.DataFrame):
+    avg = (df.groupby('genre')['popularity']
+        .mean()
+        .reset_index()
+        .sort_values('popularity', ascending = False)
+        .reset_index(drop = True)
+        )
+    avg['category'] = avg['popularity'].apply(classify)
+
+    return avg.to_dict(orient = 'records')
+
+
 
 
 
