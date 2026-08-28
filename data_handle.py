@@ -92,5 +92,21 @@ def get_top_popularity(df: pd.DataFrame, top: int):
     return most.to_dict(orient = 'records')
 
 
+# Tổng streamcount của genre
+def top_genre(df: pd.DataFrame, top: int = None):
+    genrecount = (df.groupby('genre')['stream_count']
+            .sum()
+            .reset_index()
+            .sort_values('stream_count', ascending = False)
+            .reset_index(drop = True)
+            )
+
+    if top is not None:
+        genrecount = genrecount.nlargest(top, 'stream_count')
+    return genrecount.to_dict(orient = 'records')
+    
+    
+
+
 
 
