@@ -62,7 +62,7 @@ def create_new_track (data: dict, df: pd.DataFrame) -> dict:
 
 # Xóa bài hát
 def delete_track(df: pd.DataFrame, track_id: str):
-    if trackid.lower() not in df['track_id'].str.lower().values:
+    if track_id.lower() not in df['track_id'].str.lower().values:
         return {'error': 'Không tồn tại ID'}
 
     del_id = df.index[df['track_id'].str.lower() == track_id.lower()]
@@ -73,19 +73,24 @@ def delete_track(df: pd.DataFrame, track_id: str):
     return df
 
 
+default_cols = ['genre', 'country', 'label', 'track_id', 'track_name', 'artist_name', 'release_date', 'stream_count', 'popularity']
 
 # Tìm top lượt stream cao và thấp nhất
 def get_top_track(df: pd.DataFrame, top: int):
-    default_cols = ['genre', 'country', 'label', 'track_id', 'track_name', 'artist_name', 'release_date', 'stream_count']
     highest = df.nlargest(top, 'stream_count')[default_cols].reset_index(drop=True)
-  
     return highest.to_dict(orient = 'records')
 
 
-
 def get_bottom_track(df: pd.DataFrame, bot: int):
-    default_cols = ['genre', 'country', 'label', 'track_id', 'track_name', 'artist_name', 'release_date', 'stream_count']
     lowest = df.nsmallest(bot, 'stream_count')[default_cols].reset_index(drop=True)
-
     return lowest.to_dict(orient = 'records')
-        
+
+
+# Xếp hạng độ phổ biến
+def get_top_popularity(df: pd.DataFrame, top: int):
+    most = df.nlargest(top, 'popularity')[default_cols].reset_index(drop=True)
+    return most.to_dict(orient = 'records')
+
+
+
+

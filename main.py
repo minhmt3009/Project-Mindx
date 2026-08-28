@@ -19,7 +19,8 @@ from data_processing import (get_all_track,
 from data_handle import (create_new_track,
                     delete_track,
                     get_top_track,
-                    get_bottom_track
+                    get_bottom_track,
+                    get_top_popularity,
                     )
 
 
@@ -187,7 +188,7 @@ def remove():
         return jsonify({'error': str(e)}), 500
 
 
-
+# Top lượt stream
 @app.route('/api/streamcount')
 def top_stream():
     try:
@@ -196,21 +197,36 @@ def top_stream():
 
         if top is None and bot is None:
             return jsonify({'error': 'Vui lòng chọn một'})
-        if top is not None or top < 1 or top > len(df):
-            return jsonify({'error': 'top phải là số nguyên lớn hơn 0'}), 400
-        if bot is not None or bot < 1 or bot > len(df):
-            return jsonify({'error': 'bot phải là số nguyên lớn hơn 0'}), 400
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400
+        if bot is not None and (bot < 1 or bot > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400
         
+        result = {}
+        if top is not None:
+            result['highest'] = get_top_track(df, top)
+        if bot is not None:
+            result['lowest'] = get_bottom_track(df, bot)
+            
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+# Top độ phổ biến
+def popularity():
+    try:
+        top = request.args.get('top', type = int)
+        if top is None:
+            return jsonify({'error': 'Vui lòng nhập số'}), 400
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400 
 
         result = {}
-
-        tp = get_top_track(df, top)
         if top is not None:
-            result['highest'] = tp
-
-        bm = get_bottom_track(df, bot)
-        if bot is not None:
-            result['lowest'] = bm
+            result['most'] = get_top_popularity(df, top)
 
         return jsonify(result), 200
 
