@@ -27,7 +27,10 @@ from data_handle import (create_new_track,
                     month_track_count
                     )
 
-
+from data_ultilize import(label_stream_count,
+                    label_artist,
+                    label_track_count
+                    )
 
 # Chia page
 @app.route('/api/all')
@@ -296,6 +299,58 @@ def quarter():
    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+
+# Số lượng bài hát của mỗi label
+@app.route('/api/label1')
+def label_first():
+    try:
+        top = request.args.get('top', type = int)
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400
+
+        result = label_track_count(df, top)
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+# Streamcount của mỗi label
+@app.route('/api/label2')
+def label_second():
+    try:
+        top = request.args.get('top', type = int)
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400     
+
+        result = label_stream_count(top, df)
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
+# Số lượng artist của mỗi Label
+@app.route('/api/label3')
+def label_third():
+    try:
+        top = request.args.get('top', type = int)
+        if top is not None and (top < 1 or top > len(df)):
+            return jsonify({'error': 'Vui lòng chọn lại số'}), 400     
+
+        result = label_artist(top, df)
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 
 if __name__ == '__main__':

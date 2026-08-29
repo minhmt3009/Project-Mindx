@@ -3,5 +3,50 @@ df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_pro
 
 
 # Count số bài hát của label
+def label_track_count(df: pd.DataFrame, top: int = None):
+    labelcounttrack = (df.groupby('label')['track_id']
+            .nunique()
+            .reset_index()
+            .rename(columns={'track_id': 'track_count'})
+            .sort_values('track_count', ascending = False)
+            .reset_index(drop=True)
+            )
+
+    if top is not None:
+        labelcounttrack.head(top)
+
+    return labelcountrack.to_dict(orient = 'records')
+
+
+
+
 # Streamcount của các bài hát thuộc label
+def label_stream_count(df: pd.DataFrame, top: int = None):
+    labelstreamcount = (df.groupby('label')['stream_count']
+            .sum()
+            .reset_index()
+            .sort_values('stream_count', ascending = False)
+            .reset_index(drop=True)
+            )
+
+    if top is not None:
+        labelstreamcount.nlargest(top, 'stream_count')
+
+    return labelstreamcount.to_dict(orient = 'records')
+
+
+
 # Số nghệ sĩ chọn label đó => đánh giá độ uy tín
+def label_artist(df: pd.DataFrame, top: int = None):
+    artistcount = (df.groupby('label')['artist_name']
+            .nunique()
+            .reset_index()
+            .rename(columns={'artist_name': 'artist_count'})
+            .sort_values('artist_count', ascending = False)
+            .reset_index(drop=True)
+            )
+
+    if top is not None:
+        artistcount.head(top)
+
+    return artistcount.to_dict(orient = 'records')
