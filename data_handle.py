@@ -46,7 +46,7 @@ def create_new_track (data: dict, df: pd.DataFrame) -> dict:
         'track_name': data.get('track_name'),
         'artist_name': data.get('artist_name'),
         'country': data.get('country') or '',
-        'label': data.get('label') or 'Unknown',
+        'label': data.get('label') or 'Independent',
         'genre': data.get('genre') or 'Unknown',
         'loudness_category': data.get('loudness_category') or 'Moderate',
         'release_date': release_date.strftime('%Y-%m-%d'),
