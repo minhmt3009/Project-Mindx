@@ -24,7 +24,7 @@ from data_handle import (create_new_track,
                     top_genre,
                     top_year,
                     avg_pop,
-                    classify
+                    month_track_count
                     )
 
 
@@ -281,8 +281,21 @@ def ranking():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-   
 
+
+
+# Số lượng bài hát theo quý
+@app.route('/api/quarterrank')
+def quarter():
+    try: 
+        result = month_track_count(df)
+        if isinstance(result, dict) and 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(result), 200
+   
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

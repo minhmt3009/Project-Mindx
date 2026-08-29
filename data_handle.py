@@ -128,11 +128,14 @@ def classify(score):
         return 'Very popular'
     elif score >= 40:
         return 'Popular'
+    elif score <= 0:
+        return {'error': 'Phải lớn hơn 0'}
     else:
         return 'Unpopular'
 
 
 def avg_pop(df: pd.DataFrame):
+    df = df.copy()
     avg = (df.groupby('genre')['popularity']
         .mean()
         .reset_index()
@@ -142,6 +145,37 @@ def avg_pop(df: pd.DataFrame):
     avg['category'] = avg['popularity'].apply(classify)
 
     return avg.to_dict(orient = 'records')
+
+
+
+# Số lượng bài theo từng quý của tất cả các năm
+def classify(month: int):
+    
+    if 1 <= month <= 3:
+        return 'Quý I'
+    elif 4 <= month <= 6:
+        return 'Quý II'
+    elif 7 <= month <= 9:
+        return 'Quý III'
+    elif 10 <= month <= 12:
+        return 'Quý IV'
+    else: 
+        return {'error': 'Tháng phải từ 1 đến 12'}
+
+
+def month_track_count(df: pd.DataFrame):
+    df = df.copy()
+    df['category'] = df['release_month'].apply(classify)
+
+    quartercount = (df.groupby('category')['track_id']
+                .nunique()
+                .reset_index()
+                .sort_values('release_month', ascending = True)
+                .rename(columns={'track_id': 'track_count'})
+                .reset_index(drop=True)
+                )
+
+    return quartercount.to_dict(orient = 'records')
 
 
 
