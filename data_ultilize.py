@@ -13,15 +13,15 @@ def label_track_count(df: pd.DataFrame, top: int = None):
             )
 
     if top is not None:
-        labelcounttrack.head(top)
+        labelcounttrack = labelcounttrack.head(top)
 
-    return labelcountrack.to_dict(orient = 'records')
+    return labelcounttrack.to_dict(orient = 'records')
 
 
 
 
 # Streamcount của các bài hát thuộc label
-def label_stream_count(df: pd.DataFrame, top: int = None):
+def label_stream_count(top: int = None, df: pd.DataFrame = None):
     labelstreamcount = (df.groupby('label')['stream_count']
             .sum()
             .reset_index()
@@ -30,14 +30,14 @@ def label_stream_count(df: pd.DataFrame, top: int = None):
             )
 
     if top is not None:
-        labelstreamcount.nlargest(top, 'stream_count')
+        labelstreamcount = labelstreamcount.nlargest(top, 'stream_count')
 
     return labelstreamcount.to_dict(orient = 'records')
 
 
 
 # Số nghệ sĩ chọn label đó => đánh giá độ uy tín
-def label_artist(df: pd.DataFrame, top: int = None):
+def label_artist(top: int = None, df: pd.DataFrame = None):
     artistcount = (df.groupby('label')['artist_name']
             .nunique()
             .reset_index()
@@ -47,6 +47,6 @@ def label_artist(df: pd.DataFrame, top: int = None):
             )
 
     if top is not None:
-        artistcount.head(top)
+        artistcount = artistcount.head(top)
 
     return artistcount.to_dict(orient = 'records')

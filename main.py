@@ -59,7 +59,7 @@ def all_data():
 # Trả danh sách toàn bộ bài hát
 @app.route('/api/summary')
 def all():
-    return jsonify(get_all_track())
+    return jsonify(get_all_track(df))
 
 
 
@@ -350,7 +350,7 @@ def label_third():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
+df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
 
 
 if __name__ == '__main__':

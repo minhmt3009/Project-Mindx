@@ -109,10 +109,10 @@ def top_genre(df: pd.DataFrame, top: int = None):
 
 # Tổng streamcount theo năm
 def top_year(df: pd.DataFrame, top: int = None):
-    yearcount = (df.groupby('year')['stream_count']
+    yearcount = (df.groupby('release_year')['stream_count']
             .sum()
             .reset_index()
-            .sort_values('stream_count', ascending = False)
+            .sort_values('release_year', ascending = True)
             .reset_index(drop = True)
             )
     
@@ -170,8 +170,8 @@ def month_track_count(df: pd.DataFrame):
     quartercount = (df.groupby('category')['track_id']
                 .nunique()
                 .reset_index()
-                .sort_values('release_month', ascending = True)
-                .rename(columns={'track_id': 'track_count'})
+                .rename(columns={'track_id': 'track_count', 'category': 'quarter'})
+                .sort_values('quarter', ascending = True)
                 .reset_index(drop=True)
                 )
 
