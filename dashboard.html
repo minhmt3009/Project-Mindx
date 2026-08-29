@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎵 Spotify Analytics Dashboard</title>
+  <meta name="description" content="Dashboard phân tích dữ liệu Spotify - Top stream, popularity, label analytics và nhiều hơn nữa" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a28;
+      --bg-card-hover: #20202e;
+      --accent-green: #1db954;
+      --accent-green-light: #1ed760;
+      --accent-purple: #7c3aed;
+      --accent-blue: #3b82f6;
+      --accent-pink: #ec4899;
+      --accent-orange: #f59e0b;
+      --accent-red: #ef4444;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b0;
+      --text-muted: #606080;
+      --border: rgba(255,255,255,0.08);
+      --border-active: rgba(29,185,84,0.5);
+      --glass: rgba(255,255,255,0.04);
+      --gold: #ffd700;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(29,185,84,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(124,58,237,0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-wrapper { position: relative; z-index: 1; }
+
+    header {
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-purple));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo span { color: var(--accent-green); }
+
+    .header-info {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .tab-nav {
+      background: rgba(18,18,26,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+    }
+    .tab-nav::-webkit-scrollbar { height: 0; }
+
+    .tab-btn {
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab-btn:hover { color: var(--text-primary); background: var(--glass); }
+    .tab-btn.active {
+      color: var(--accent-green);
+      border-bottom-color: var(--accent-green);
+      background: rgba(29,185,84,0.05);
+    }
+
+    .main-content { padding: 28px 32px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-title {
+      font-size: 24px; font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    .section-subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent-green), transparent); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-purple), transparent); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-blue), transparent); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--accent-pink), transparent); }
+    .stat-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-label { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media(max-width:900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .controls-row {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .select-styled {
+      appearance: none;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 36px 10px 14px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+    .select-styled:hover, .select-styled:focus { border-color: var(--accent-green); outline: none; }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-green), #19a048);
+      color: white;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(29,185,84,0.4); }
+    .btn-danger {
+      background: linear-gradient(135deg, var(--accent-red), #c53030);
+      color: white;
+    }
+    .btn-danger:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(239,68,68,0.4); }
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent-green); }
+
+    .label-text { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+
+    .search-container { position: relative; flex: 1; min-width: 280px; }
+    .search-prefix {
+      display: flex; align-items: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .search-prefix:focus-within { border-color: var(--accent-green); }
+    .prefix-badge {
+      background: var(--accent-green);
+      color: white;
+      font-size: 12px; font-weight: 700;
+      padding: 0 12px;
+      height: 42px;
+      display: flex; align-items: center;
+      white-space: nowrap;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 0 14px;
+      height: 42px;
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+
+    .suggestions-box {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 200;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      display: none;
+    }
+    .suggestions-box.open { display: block; }
+    .suggestion-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover { background: var(--glass); }
+    .suggestion-item .song-name { font-weight: 500; }
+    .suggestion-item .song-meta { color: var(--text-muted); font-size: 12px; }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: rgba(29,185,84,0.08); }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent-green);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--glass); }
+    tbody td { padding: 10px 16px; color: var(--text-secondary); }
+    tbody td:first-child { color: var(--text-primary); font-weight: 500; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-green { background: rgba(29,185,84,0.15); color: var(--accent-green); }
+    .badge-purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .badge-orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .badge-red { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-input {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--accent-green); }
+
+    #toast-container {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      max-width: 320px;
+      animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .toast.success { border-color: rgba(29,185,84,0.4); }
+    .toast.error { border-color: rgba(239,68,68,0.4); }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-overlay {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 120px; gap: 10px; color: var(--text-secondary);
+    }
+
+    .quarter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .quarter-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .quarter-card:hover { transform: translateY(-2px); }
+    .quarter-card .q-name { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+    .quarter-card .q-year { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+    .quarter-card .q-count { font-size: 24px; font-weight: 800; }
+    .quarter-card .q-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .pie-legend { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+    .pie-legend-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .pie-legend-item:hover { background: var(--glass); }
+    .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .legend-label { flex: 1; font-size: 14px; font-weight: 600; }
+    .legend-count { font-size: 20px; font-weight: 800; }
+    .legend-pct { font-size: 12px; color: var(--text-muted); }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    .conclusion-box {
+      background: linear-gradient(135deg, rgba(29,185,84,0.06), rgba(124,58,237,0.06));
+      border: 1px solid rgba(29,185,84,0.2);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .conclusion-box h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--accent-green); }
+    .conclusion-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+    .info-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🎵</div>
+      Spotify <span>Analytics</span>
+    </div>
+    <div class="header-info">
+      <div class="status-dot"></div>
+      <span>Live · API: localhost:8888</span>
+    </div>
+  </header>
+
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('overview')" id="tab-overview">📊 Tổng quan</button>
+    <button class="tab-btn" onclick="switchTab('search')" id="tab-search">🔍 Tìm kiếm</button>
+    <button class="tab-btn" onclick="switchTab('filter')" id="tab-filter">🎛️ Lọc dữ liệu</button>
+    <button class="tab-btn" onclick="switchTab('label')" id="tab-label">🏷️ Label Analysis</button>
+    <button class="tab-btn" onclick="switchTab('statistics')" id="tab-statistics">📈 Thống kê</button>
+    <button class="tab-btn" onclick="switchTab('manage')" id="tab-manage">⚙️ Quản lý</button>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- TAB: OVERVIEW -->
+    <section id="panel-overview" class="tab-panel active">
+      <h1 class="section-title">📊 Tổng quan dữ liệu Spotify</h1>
+      <p class="section-subtitle">Nhìn toàn cảnh các chỉ số quan trọng của kho nhạc</p>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">🎵</div><div class="stat-value" id="stat-total">—</div><div class="stat-label">Tổng số bài hát</div></div>
+        <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value" id="stat-top-stream">—</div><div class="stat-label">Max Stream Count</div></div>
+        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="stat-top-pop">—</div><div class="stat-label">Max Popularity</div></div>
+        <div class="stat-card"><div class="stat-icon">🏷️</div><div class="stat-value" id="stat-labels">—</div><div class="stat-label">Số Label</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          🏆 Bảng xếp hạng
+          <div class="controls-row" style="margin:0; margin-left: auto;">
+            <span class="label-text">Xếp hạng theo:</span>
+            <select class="select-styled" id="rank-metric" onchange="loadTopChart()">
+              <option value="stream">🎧 Lượt stream</option>
+              <option value="popular">⭐ Độ phổ biến</option>
+            </select>
+            <span class="label-text">Top:</span>
+            <select class="select-styled" id="rank-n" onchange="loadTopChart()">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+        </div>
+        <div id="top-chart" style="min-height:380px;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📈 Stream Count theo Năm (biến thiên)</div>
+        <div id="line-year-chart" style="min-height:340px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB: SEARCH -->
+    <section id="panel-search" class="tab-panel">
+      <h1 class="section-title">🔍 Tìm kiếm bài hát</h1>
+      <p class="section-subtitle">Tìm theo Track ID (có tiền tố sẵn) hoặc tên bài hát với gợi ý tự động</p>
+
+      <div class="card">
+        <div class="card-title">Chế độ tìm kiếm</div>
+        <div class="controls-row" style="margin-bottom:16px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="search-mode" value="id" id="mode-id" checked onchange="updateSearchMode()" style="accent-color:var(--accent-green);width:16px;height:16px;" />
+            <span>🔖 Tìm theo Track ID</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="search-mode" value="song" id="mode-song" onchange="updateSearchMode()" style="accent-color:var(--accent-green);width:16px;height:16px;" />
+            <span>🎵 Tìm theo tên bài hát</span>
+          </label>
+        </div>
+
+        <div id="search-id-area" class="controls-row">
+          <div class="search-container">
+            <div class="search-prefix">
+              <div class="prefix-badge" id="id-prefix">track_</div>
+              <input type="text" class="search-input" id="search-id-input" placeholder="Nhập phần sau tiền tố..." oninput="onIdInput()" onkeydown="if(event.key==='Enter')doSearchById()" />
+            </div>
+            <div class="suggestions-box" id="id-suggestions"></div>
+          </div>
+          <button class="btn btn-primary" onclick="doSearchById()">🔍 Tìm</button>
+          <button class="btn btn-secondary" onclick="clearSearch()">✕ Xóa</button>
+        </div>
+
+        <div id="search-song-area" class="controls-row" style="display:none;">
+          <div class="search-container">
+            <div class="search-prefix">
+              <div class="prefix-badge" style="background:var(--accent-purple);">🎵</div>
+              <input type="text" class="search-input" id="search-song-input" placeholder="Nhập tên bài hát..." oninput="onSongInput()" onkeydown="if(event.key==='Enter')doSearchBySong()" />
+            </div>
+            <div class="suggestions-box" id="song-suggestions"></div>
+          </div>
+          <button class="btn btn-primary" onclick="doSearchBySong()">🔍 Tìm</button>
+          <button class="btn btn-secondary" onclick="clearSearch()">✕ Xóa</button>
+        </div>
+      </div>
+
+      <div id="search-results"></div>
+    </section>
+
+    <!-- TAB: FILTER -->
+    <section id="panel-filter" class="tab-panel">
+      <h1 class="section-title">🎛️ Lọc dữ liệu</h1>
+      <p class="section-subtitle">Kết hợp nhiều tiêu chí để lọc danh sách bài hát</p>
+
+      <div class="card">
+        <div class="card-title">Chọn tiêu chí lọc</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">🎸 Genre</label>
+            <select class="select-styled" id="f-genre"><option value="">-- Tất cả --</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🎤 Artist</label>
+            <select class="select-styled" id="f-artist"><option value="">-- Tất cả --</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">📅 Năm phát hành</label>
+            <select class="select-styled" id="f-year"><option value="">-- Tất cả --</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🏷️ Label</label>
+            <select class="select-styled" id="f-label"><option value="">-- Tất cả --</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🌍 Country</label>
+            <select class="select-styled" id="f-country"><option value="">-- Tất cả --</option></select>
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="applyFilter()">🔍 Áp dụng lọc</button>
+          <button class="btn btn-secondary" onclick="clearFilter()">✕ Xóa bộ lọc</button>
+          <span id="filter-count" class="info-chip" style="display:none;"></span>
+        </div>
+      </div>
+
+      <div id="filter-results"></div>
+    </section>
+
+    <!-- TAB: LABEL -->
+    <section id="panel-label" class="tab-panel">
+      <h1 class="section-title">🏷️ Phân tích Label</h1>
+      <p class="section-subtitle">So sánh các label âm nhạc theo số bài, stream count và nghệ sĩ</p>
+
+      <div class="card">
+        <div class="card-title">
+          📊 Biểu đồ xà ngang – Phân tích theo Label
+          <div class="controls-row" style="margin:0; margin-left:auto;">
+            <span class="label-text">Hiển thị:</span>
+            <select class="select-styled" id="label-metric" onchange="loadLabelChart()">
+              <option value="track">🎵 Số bài hát</option>
+              <option value="stream">🎧 Stream Count</option>
+              <option value="artist">🎤 Số nghệ sĩ</option>
+            </select>
+            <span class="label-text">Top:</span>
+            <select class="select-styled" id="label-n" onchange="loadLabelChart()">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+        <div id="label-chart" style="min-height:420px;"></div>
+
+        <div class="conclusion-box">
+          <h4>💡 Kết luận về Label</h4>
+          <p id="label-conclusion-text">Đang phân tích dữ liệu...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: STATISTICS -->
+    <section id="panel-statistics" class="tab-panel">
+      <h1 class="section-title">📈 Thống kê chi tiết</h1>
+      <p class="section-subtitle">Phân tích độ phổ biến, phân phối theo quý và xu hướng</p>
+
+      <div class="card">
+        <div class="card-title">
+          📅 Số bài hát theo Quý
+          <div class="controls-row" style="margin:0; margin-left:auto;">
+            <span class="label-text">Lọc quý:</span>
+            <select class="select-styled" id="quarter-filter" onchange="filterQuarterCards()">
+              <option value="all">📋 Tất cả các quý</option>
+              <option value="Q1">Q1 (Jan–Mar)</option>
+              <option value="Q2">Q2 (Apr–Jun)</option>
+              <option value="Q3">Q3 (Jul–Sep)</option>
+              <option value="Q4">Q4 (Oct–Dec)</option>
+            </select>
+          </div>
+        </div>
+        <div class="quarter-grid" id="quarter-grid">
+          <div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tải...</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🎯 Pie Chart – Mức độ phổ biến trung bình</div>
+          <div id="pop-pie-chart" style="min-height:300px;"></div>
+          <div class="pie-legend" id="pop-legend"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Bảng chi tiết – Popularity theo Genre</div>
+          <div class="table-wrapper" style="max-height:440px; overflow-y:auto;">
+            <table id="pop-table">
+              <thead><tr><th>#</th><th>Genre</th><th>Avg Popularity</th><th>Mức độ</th></tr></thead>
+              <tbody id="pop-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: MANAGE -->
+    <section id="panel-manage" class="tab-panel">
+      <h1 class="section-title">⚙️ Quản lý bài hát</h1>
+      <p class="section-subtitle">Thêm mới hoặc xóa bài hát khỏi hệ thống</p>
+
+      <div class="card">
+        <div class="card-title">➕ Thêm bài hát mới</div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Track ID *</label><input type="text" class="form-input" id="new-id" placeholder="track_XXXXXX" /></div>
+          <div class="form-group"><label class="form-label">Tên bài hát *</label><input type="text" class="form-input" id="new-name" placeholder="Song name" /></div>
+          <div class="form-group"><label class="form-label">Artist *</label><input type="text" class="form-input" id="new-artist" placeholder="Artist name" /></div>
+          <div class="form-group"><label class="form-label">Genre</label><input type="text" class="form-input" id="new-genre" placeholder="pop, rock, hip-hop..." /></div>
+          <div class="form-group"><label class="form-label">Label</label><input type="text" class="form-input" id="new-label" placeholder="Label name" /></div>
+          <div class="form-group"><label class="form-label">Country</label><input type="text" class="form-input" id="new-country" placeholder="US, UK, VN..." /></div>
+          <div class="form-group"><label class="form-label">Năm phát hành</label><input type="number" class="form-input" id="new-year" placeholder="2024" min="1900" max="2030" /></div>
+          <div class="form-group"><label class="form-label">Tháng phát hành</label><input type="number" class="form-input" id="new-month" placeholder="1-12" min="1" max="12" /></div>
+          <div class="form-group"><label class="form-label">Stream Count</label><input type="number" class="form-input" id="new-stream" placeholder="0" min="0" /></div>
+          <div class="form-group"><label class="form-label">Popularity (0–100)</label><input type="number" class="form-input" id="new-pop" placeholder="0–100" min="0" max="100" /></div>
+          <div class="form-group"><label class="form-label">Loudness (dB)</label><input type="number" class="form-input" id="new-loudness" placeholder="-60 to 0" step="0.1" /></div>
+          <div class="form-group"><label class="form-label">Duration (ms)</label><input type="number" class="form-input" id="new-duration" placeholder="ms" min="0" /></div>
+        </div>
+        <div style="margin-top:20px; display:flex; gap:10px;">
+          <button class="btn btn-primary" onclick="addNewSong()">➕ Thêm mới</button>
+          <button class="btn btn-secondary" onclick="clearAddForm()">✕ Xóa form</button>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="card">
+        <div class="card-title">🗑️ Xóa bài hát</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Nhập Track ID cần xóa. Thao tác này không thể hoàn tác.</p>
+        <div style="display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; min-width:200px;">
+            <label class="form-label">Track ID cần xóa</label>
+            <input type="text" class="form-input" id="delete-id" placeholder="track_XXXXXX" />
+          </div>
+          <button class="btn btn-danger" onclick="deleteSong()">🗑️ Xóa</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const API = 'http://localhost:8888/api';
+let allSongs = [];
+let quarterData = [];
+
+window.addEventListener('load', async () => {
+  await loadSummaryCache();
+  loadOverviewStats();
+  loadTopChart();
+  loadYearLineChart();
+  loadFilterDropdowns();
+  loadLabelChart();
+  loadStatisticsTab();
+});
+
+// ── TAB ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ── CACHE ──
+async function loadSummaryCache() {
+  try {
+    const res = await fetch(`${API}/summary`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allSongs = await res.json();
+  } catch(e) {
+    showToast('⚠️ Không thể kết nối API. Flask đang chạy trên port 8888 chưa?', 'error');
+  }
+}
+
+// ── STATS CARDS ──
+function loadOverviewStats() {
+  document.getElementById('stat-total').textContent = allSongs.length.toLocaleString();
+  const maxStream = allSongs.reduce((m,s) => Math.max(m, +(s.stream_count||0)), 0);
+  document.getElementById('stat-top-stream').textContent = fmtNum(maxStream);
+  const maxPop = allSongs.reduce((m,s) => Math.max(m, +(s.popularity||0)), 0);
+  document.getElementById('stat-top-pop').textContent = maxPop;
+  const labels = new Set(allSongs.map(s => s.label).filter(Boolean));
+  document.getElementById('stat-labels').textContent = labels.size;
+}
+
+// ── TOP CHART (Column) ──
+async function loadTopChart() {
+  const metric = document.getElementById('rank-metric').value;
+  const n = parseInt(document.getElementById('rank-n').value);
+  document.getElementById('top-chart').innerHTML = '<div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tải...</div>';
+
+  try {
+    let data = [];
+    if (metric === 'stream') {
+      const res = await fetch(`${API}/streamcount?top=${n}`);
+      const json = await res.json();
+      data = (json.highest || []).map(s => ({ name: s.track_name || s.name || 'Unknown', value: +(s.stream_count||0) }));
+    } else {
+      const res = await fetch(`${API}/popular?top=${n}`);
+      const json = await res.json();
+      data = (json.most || []).map(s => ({ name: s.track_name || s.name || 'Unknown', value: +(s.popularity||0) }));
+    }
+
+    if (!data.length) { document.getElementById('top-chart').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Không có dữ liệu</p></div>'; return; }
+
+    const isStream = metric === 'stream';
+    const colors = ['#ffd700','#c0c0c0','#cd7f32','#1db954','#3b82f6','#7c3aed','#ec4899','#f59e0b','#06b6d4','#10b981',
+                    '#ef4444','#8b5cf6','#14b8a6','#f97316','#84cc16','#d946ef','#0ea5e9','#a78bfa','#fb923c','#4ade80'];
+    const medals = ['👑','🥈','🥉'];
+
+    Highcharts.chart('top-chart', {
+      chart: { type: 'column', backgroundColor: 'transparent', style: { fontFamily: 'Inter, sans-serif' }, animation: { duration: 600 } },
+      title: { text: null },
+      xAxis: {
+        categories: data.map((d,i) => {
+          const m = medals[i] || '';
+          const shortName = d.name.length > 20 ? d.name.slice(0,20)+'…' : d.name;
+          return `${m} ${shortName}`;
+        }),
+        labels: { style: { color: '#a0a0b0', fontSize: '11px' }, rotation: -25 },
+        lineColor: 'rgba(255,255,255,0.1)', tickColor: 'rgba(255,255,255,0.1)',
+      },
+      yAxis: {
+        title: { text: isStream ? 'Stream Count' : 'Popularity', style: { color: '#a0a0b0' } },
+        labels: { formatter() { return isStream ? fmtNum(this.value) : this.value; }, style: { color: '#a0a0b0' } },
+        gridLineColor: 'rgba(255,255,255,0.06)',
+      },
+      tooltip: {
+        formatter() {
+          const medal = medals[this.point.index] || (this.point.index+1)+'위';
+          return `<b>${medal} ${this.point.category}</b><br/>${isStream ? '🎧 Streams: <b>'+fmtNum(this.y)+'</b>' : '⭐ Popularity: <b>'+this.y+'</b>'}`;
+        },
+        backgroundColor: '#1a1a28', borderColor: 'rgba(255,255,255,0.1)', style: { color: '#fff' }
+      },
+      plotOptions: {
+        column: {
+          borderRadius: 6,
+          colorByPoint: true,
+          colors: colors.slice(0, data.length),
+          dataLabels: {
+            enabled: true,
+            formatter() { return isStream ? fmtNum(this.y) : this.y; },
+            style: { color: '#fff', fontSize: '11px', fontWeight: '600', textOutline: 'none' }
+          }
+        }
+      },
+      series: [{ name: isStream ? 'Stream Count' : 'Popularity', data: data.map(d => d.value) }],
+      legend: { enabled: false },
+      credits: { enabled: false },
+      exporting: { enabled: false }
+    });
+  } catch(e) {
+    document.getElementById('top-chart').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+// ── LINE CHART: Stream theo năm ──
+async function loadYearLineChart() {
+  document.getElementById('line-year-chart').innerHTML = '<div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tải...</div>';
+  try {
+    const res = await fetch(`${API}/yearcountrank`);
+    const raw = await res.json();
+
+    let arr = Array.isArray(raw) ? raw : [];
+    // Try to normalize: [{year, stream_count}] or [{release_year, total_stream_count}]
+    arr = arr.map(d => ({
+      year: d.year || d.release_year || d.Year || '',
+      stream: d.stream_count || d.total_stream_count || d.total || d.count || 0
+    })).filter(d => d.year);
+    arr.sort((a,b) => +a.year - +b.year);
+
+    if (!arr.length) { document.getElementById('line-year-chart').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Không có dữ liệu theo năm</p></div>'; return; }
+
+    Highcharts.chart('line-year-chart', {
+      chart: { type: 'spline', backgroundColor: 'transparent', style: { fontFamily: 'Inter, sans-serif' }, animation: { duration: 800 } },
+      title: { text: null },
+      xAxis: {
+        categories: arr.map(d => String(d.year)),
+        labels: { style: { color: '#a0a0b0' } },
+        lineColor: 'rgba(255,255,255,0.1)', tickColor: 'rgba(255,255,255,0.1)',
+      },
+      yAxis: {
+        title: { text: 'Tổng Stream Count', style: { color: '#a0a0b0' } },
+        labels: { formatter() { return fmtNum(this.value); }, style: { color: '#a0a0b0' } },
+        gridLineColor: 'rgba(255,255,255,0.06)',
+      },
+      tooltip: {
+        formatter() { return `<b>Năm ${this.x}</b><br/>🎧 Tổng Streams: <b>${fmtNum(this.y)}</b>`; },
+        backgroundColor: '#1a1a28', borderColor: 'rgba(255,255,255,0.1)', style: { color: '#fff' }
+      },
+      plotOptions: {
+        spline: {
+          lineWidth: 3,
+          marker: { enabled: true, radius: 5, fillColor: '#1db954', lineWidth: 2, lineColor: '#0a0a0f' },
+          color: { linearGradient: { x1:0,y1:0,x2:1,y2:0 }, stops: [[0,'#1db954'],[1,'#7c3aed']] }
+        }
+      },
+      series: [{ name: 'Stream Count', data: arr.map(d => +d.stream) }],
+      legend: { enabled: false },
+      credits: { enabled: false },
+      exporting: { enabled: false }
+    });
+  } catch(e) {
+    document.getElementById('line-year-chart').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+// ── SEARCH ──
+function updateSearchMode() {
+  const mode = document.querySelector('input[name="search-mode"]:checked').value;
+  document.getElementById('search-id-area').style.display = mode === 'id' ? 'flex' : 'none';
+  document.getElementById('search-song-area').style.display = mode === 'song' ? 'flex' : 'none';
+  document.getElementById('search-results').innerHTML = '';
+}
+
+function onIdInput() {
+  const val = document.getElementById('search-id-input').value.toLowerCase();
+  const box = document.getElementById('id-suggestions');
+  if (!val) { box.classList.remove('open'); return; }
+  const matches = allSongs.filter(s => {
+    const id = String(s.track_id || s.id || '').toLowerCase();
+    return id.includes(val);
+  }).slice(0, 8);
+  if (!matches.length) { box.classList.remove('open'); return; }
+  box.innerHTML = matches.map(s => {
+    const id = escHtml(String(s.track_id || s.id || ''));
+    const nm = escHtml(String(s.track_name || s.name || ''));
+    return `<div class="suggestion-item" onclick="selectIdSuggestion('${id}')"><span class="song-name">${id}</span><span class="song-meta">${nm}</span></div>`;
+  }).join('');
+  box.classList.add('open');
+}
+
+function selectIdSuggestion(id) {
+  const bare = id.startsWith('track_') ? id.slice(6) : id;
+  document.getElementById('search-id-input').value = bare;
+  document.getElementById('id-suggestions').classList.remove('open');
+  doSearchById();
+}
+
+let songDebounce;
+function onSongInput() {
+  clearTimeout(songDebounce);
+  songDebounce = setTimeout(() => {
+    const val = document.getElementById('search-song-input').value.toLowerCase();
+    const box = document.getElementById('song-suggestions');
+    if (val.length < 2) { box.classList.remove('open'); return; }
+    const matches = allSongs.filter(s => (s.track_name||s.name||'').toLowerCase().includes(val)).slice(0,8);
+    if (!matches.length) { box.classList.remove('open'); return; }
+    box.innerHTML = matches.map(s => {
+      const nm = escHtml(String(s.track_name||s.name||''));
+      const ar = escHtml(String(s.artist_name||s.artist||''));
+      const yr = s.release_year||s.year||'';
+      return `<div class="suggestion-item" onclick="selectSongSuggestion('${nm}')"><span class="song-name">${nm}</span><span class="song-meta">${ar} · ${yr}</span></div>`;
+    }).join('');
+    box.classList.add('open');
+  }, 200);
+}
+
+function selectSongSuggestion(name) {
+  document.getElementById('search-song-input').value = name;
+  document.getElementById('song-suggestions').classList.remove('open');
+  doSearchBySong();
+}
+
+async function doSearchById() {
+  const bare = document.getElementById('search-id-input').value.trim();
+  if (!bare) { showToast('Vui lòng nhập Track ID', 'error'); return; }
+  const fullId = bare.startsWith('track_') ? bare : 'track_' + bare;
+  document.getElementById('id-suggestions').classList.remove('open');
+  document.getElementById('search-results').innerHTML = '<div class="card"><div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tìm...</div></div>';
+  try {
+    const res = await fetch(`${API}/search?id=${encodeURIComponent(fullId)}`);
+    const data = await res.json();
+    renderSearchResults(data);
+  } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+}
+
+async function doSearchBySong() {
+  const song = document.getElementById('search-song-input').value.trim();
+  if (!song) { showToast('Vui lòng nhập tên bài hát', 'error'); return; }
+  document.getElementById('song-suggestions').classList.remove('open');
+  document.getElementById('search-results').innerHTML = '<div class="card"><div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tìm...</div></div>';
+  try {
+    const res = await fetch(`${API}/search?song=${encodeURIComponent(song)}`);
+    const data = await res.json();
+    renderSearchResults(data);
+  } catch(e) { showToast('Lỗi: ' + e.message, 'error'); }
+}
+
+function renderSearchResults(data) {
+  const el = document.getElementById('search-results');
+  if (!data) { el.innerHTML = ''; return; }
+  if (data.error) { el.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">⚠️</div><p>${escHtml(data.error)}</p></div></div>`; return; }
+  const rows = Array.isArray(data) ? data : [data];
+  if (!rows.length) { el.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">😔</div><p>Không tìm thấy kết quả nào</p></div></div>'; return; }
+  el.innerHTML = `<div class="card"><div class="card-title">🎵 Kết quả (${rows.length})</div><div class="table-wrapper">${renderTable(rows)}</div></div>`;
+}
+
+function clearSearch() {
+  document.getElementById('search-id-input').value = '';
+  document.getElementById('search-song-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.querySelectorAll('.suggestions-box').forEach(b => b.classList.remove('open'));
+}
+
+// ── FILTER ──
+function loadFilterDropdowns() {
+  const genres    = [...new Set(allSongs.map(s=>s.genre).filter(Boolean))].sort();
+  const artists   = [...new Set(allSongs.map(s=>s.artist_name||s.artist).filter(Boolean))].sort();
+  const years     = [...new Set(allSongs.map(s=>s.release_year||s.year).filter(Boolean))].sort((a,b)=>+a-+b);
+  const labels    = [...new Set(allSongs.map(s=>s.label).filter(Boolean))].sort();
+  const countries = [...new Set(allSongs.map(s=>s.country).filter(Boolean))].sort();
+  fillSelect('f-genre',   genres,    '-- Tất cả Genre --');
+  fillSelect('f-artist',  artists,   '-- Tất cả Artist --');
+  fillSelect('f-year',    years,     '-- Tất cả năm --');
+  fillSelect('f-label',   labels,    '-- Tất cả Label --');
+  fillSelect('f-country', countries, '-- Tất cả Country --');
+}
+
+function fillSelect(id, opts, ph) {
+  document.getElementById(id).innerHTML = `<option value="">${ph}</option>` + opts.map(o=>`<option value="${escHtml(String(o))}">${escHtml(String(o))}</option>`).join('');
+}
+
+async function applyFilter() {
+  const params = new URLSearchParams();
+  const genre   = document.getElementById('f-genre').value;
+  const artist  = document.getElementById('f-artist').value;
+  const year    = document.getElementById('f-year').value;
+  const label   = document.getElementById('f-label').value;
+  const country = document.getElementById('f-country').value;
+  if (genre)   params.append('genre',   genre);
+  if (artist)  params.append('artist',  artist);
+  if (year)    params.append('year',    year);
+  if (label)   params.append('label',   label);
+  if (country) params.append('country', country);
+  if (!params.toString()) { showToast('Vui lòng chọn ít nhất 1 tiêu chí', 'error'); return; }
+
+  document.getElementById('filter-results').innerHTML = '<div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang lọc...</div>';
+  try {
+    const res = await fetch(`${API}/filter?${params}`);
+    const data = await res.json();
+    if (data.error) { document.getElementById('filter-results').innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">⚠️</div><p>${escHtml(data.error)}</p></div></div>`; return; }
+    const rows = Array.isArray(data) ? data : [];
+    const chip = document.getElementById('filter-count');
+    chip.style.display = 'inline-flex';
+    chip.textContent = `✅ ${rows.length} kết quả`;
+    document.getElementById('filter-results').innerHTML = `<div class="card"><div class="card-title">📋 Kết quả lọc (${rows.length} bài)</div><div class="table-wrapper">${renderTable(rows)}</div></div>`;
+  } catch(e) { showToast('Lỗi lọc: ' + e.message, 'error'); }
+}
+
+function clearFilter() {
+  ['f-genre','f-artist','f-year','f-label','f-country'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('filter-results').innerHTML = '';
+  document.getElementById('filter-count').style.display = 'none';
+}
+
+// ── LABEL CHART (Bar) ──
+async function loadLabelChart() {
+  const metric = document.getElementById('label-metric').value;
+  const n      = parseInt(document.getElementById('label-n').value);
+  document.getElementById('label-chart').innerHTML = '<div class="loading-overlay"><div class="loading-spinner"></div>&nbsp;Đang tải...</div>';
+
+  try {
+    const endpointMap = { track: `${API}/label1?top=${n}`, stream: `${API}/label2?top=${n}`, artist: `${API}/label3?top=${n}` };
+    const res  = await fetch(endpointMap[metric]);
+    const raw  = await res.json();
+    const arr  = Array.isArray(raw) ? raw : (raw.data || []);
+
+    // Normalize
+    const normalized = arr.map(d => ({
+      label: d.label || d.name || d.Label || 'Unknown',
+      value: +(d.value || d.count || d.stream_count || d.artist_count || d.track_count || 0)
+    }));
+    normalized.sort((a,b) => b.value - a.value);
+
+    if (!normalized.length) { document.getElementById('label-chart').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Không có dữ liệu label</p></div>'; return; }
+
+    const isStream   = metric === 'stream';
+    const metricLabel = { track:'Số bài hát', stream:'Stream Count', artist:'Số nghệ sĩ' }[metric];
+    const barColor    = { track:'#1db954', stream:'#3b82f6', artist:'#7c3aed' }[metric];
+
+    Highcharts.chart('label-chart', {
+      chart: { type: 'bar', backgroundColor: 'transparent', style: { fontFamily: 'Inter, sans-serif' }, animation: { duration: 700 }, height: Math.max(360, normalized.length * 38 + 80) },
+      title: { text: null },
+      xAxis: {
+        categories: normalized.map(d => d.label),
+        labels: { style: { color: '#a0a0b0', fontSize: '12px' } },
+        lineColor: 'rgba(255,255,255,0.1)', tickColor: 'rgba(255,255,255,0.1)',
+      },
+      yAxis: {
+        title: { text: metricLabel, style: { color: '#a0a0b0' } },
+        labels: { formatter() { return isStream ? fmtNum(this.value) : this.value.toLocaleString(); }, style: { color: '#a0a0b0' } },
+        gridLineColor: 'rgba(255,255,255,0.06)',
+      },
+      tooltip: {
+        formatter() { return `<b>🏷️ ${this.x}</b><br/>${metricLabel}: <b>${isStream ? fmtNum(this.y) : this.y.toLocaleString()}</b>`; },
+        backgroundColor: '#1a1a28', borderColor: 'rgba(255,255,255,0.1)', style: { color: '#fff' }
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          color: barColor,
+          dataLabels: {
+            enabled: true,
+            formatter() { return isStream ? fmtNum(this.y) : this.y.toLocaleString(); },
+            style: { color: '#fff', fontSize: '11px', fontWeight: '600', textOutline: 'none' }
+          }
+        }
+      },
+      series: [{ name: metricLabel, data: normalized.map(d=>d.value) }],
+      legend: { enabled: false },
+      credits: { enabled: false },
+      exporting: { enabled: false }
+    });
+
+    updateLabelConclusion(normalized, metric);
+
+  } catch(e) {
+    document.getElementById('label-chart').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+function updateLabelConclusion(data, metric) {
+  if (!data.length) return;
+  const top1 = data[0].label; const v1 = data[0].value;
+  const top2 = data[1] ? data[1].label : ''; 
+  const top3 = data[2] ? data[2].label : '';
+  const total = data.reduce((a,d)=>a+d.value,0);
+  const pct   = total>0 ? Math.round(v1/total*100) : 0;
+  const texts = {
+    stream: `Label <strong>${top1}</strong> dẫn đầu về tổng stream count với <strong>${fmtNum(v1)}</strong> streams, chiếm ~${pct}% tổng số. Điều này cho thấy ${top1} đang sở hữu những nghệ sĩ có lượt nghe cao nhất thị trường.${top2?` Theo sau là <strong>${top2}</strong>${top3?' và <strong>'+top3+'</strong>':''}.`:''} Sự tập trung stream vào top labels phản ánh thị trường âm nhạc đang có xu hướng tập trung quyền lực vào một số ít hãng lớn.`,
+    track:  `Label <strong>${top1}</strong> có nhiều bài hát nhất (<strong>${v1.toLocaleString()}</strong> bài), chiếm ~${pct}% tổng.${top2?` Tiếp theo là <strong>${top2}</strong> và <strong>${top3}</strong>.`:''} Số lượng bài nhiều phản ánh quy mô ký kết nghệ sĩ rộng lớn. Tuy nhiên, cần kết hợp với stream count để đánh giá chất lượng thực sự của label.`,
+    artist: `Label <strong>${top1}</strong> ký hợp đồng với nhiều nghệ sĩ nhất (<strong>${v1.toLocaleString()}</strong> nghệ sĩ), chiếm ~${pct}% tổng.${top2?` Kế tiếp là <strong>${top2}</strong> và <strong>${top3}</strong>.`:''} Số lượng nghệ sĩ nhiều phản ánh sức hút và tầm ảnh hưởng của label trong ngành công nghiệp âm nhạc – ${top1} có lẽ đang là điểm đến lý tưởng cho các nghệ sĩ muốn phát triển sự nghiệp.`
+  };
+  document.getElementById('label-conclusion-text').innerHTML = texts[metric];
+}
+
+// ── STATISTICS ──
+function loadStatisticsTab() {
+  loadQuarterData();
+  loadPopPieChart();
+}
+
+async function loadQuarterData() {
+  try {
+    const res = await fetch(`${API}/quarterrank`);
+    const raw = await res.json();
+    quarterData = Array.isArray(raw) ? raw : (raw.data || []);
+    filterQuarterCards();
+  } catch(e) {
+    document.getElementById('quarter-grid').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+function filterQuarterCards() {
+  const filter = document.getElementById('quarter-filter').value;
+  let data = quarterData;
+  if (filter !== 'all') {
+    // API trả về 'Quý I', 'Quý II', 'Quý III', 'Quý IV'
+    const qMap = { Q1:'Quý I', Q2:'Quý II', Q3:'Quý III', Q4:'Quý IV' };
+    const target = qMap[filter] || filter;
+    data = data.filter(d => {
+      const q = String(d.quarter || d.Quarter || d.category || '').trim();
+      return q === target || q.toUpperCase() === filter.toUpperCase();
+    });
+  }
+
+  const grid = document.getElementById('quarter-grid');
+  if (!data.length) { grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><p>Không có dữ liệu cho quý này</p></div>`; return; }
+
+  // API trả về {quarter: 'Quý I', track_count: N}
+  // Map 'Quý I' -> Q1, etc. để tô màu
+  const qLabel = { 'QUÝ I':'Q1', 'QUÝ II':'Q2', 'QUÝ III':'Q3', 'QUÝ IV':'Q4' };
+  const qColors = { Q1:'#3b82f6', Q2:'#1db954', Q3:'#f59e0b', Q4:'#ec4899' };
+
+  grid.innerHTML = data.map(d => {
+    const rawQ  = String(d.quarter || d.Quarter || d.category || d.q || 'Q?');
+    const qKey  = qLabel[rawQ.toUpperCase()] || rawQ.toUpperCase();
+    const yr    = d.year || d.Year || d.release_year || '';
+    const cnt   = +(d.count || d.track_count || d.total || 0);
+    const col   = qColors[qKey] || '#1db954';
+    return `<div class="quarter-card" style="border-color:${col}33;">
+      <div class="q-name" style="color:${col};">${rawQ}</div>
+      ${yr ? `<div class="q-year">${yr}</div>` : ''}
+      <div class="q-count" style="color:${col};">${cnt.toLocaleString()}</div>
+      <div class="q-label">bài hát</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadPopPieChart() {
+  try {
+    const res = await fetch(`${API}/poprank`);
+    const raw = await res.json();
+    const arr = Array.isArray(raw) ? raw : (raw.data || []);
+
+    const groups = { 'Very Popular':0, 'Popular':0, 'Unpopular':0 };
+    arr.forEach(d => {
+      const lvl = d.level || d.category || d.classification || d.rank || '';
+      const avg = +(d.avg_popularity || d.avg || d.average || d.popularity || 0);
+      groups[classifyPop(avg, lvl)]++;
+    });
+
+    const total = groups['Very Popular'] + groups['Popular'] + groups['Unpopular'];
+    const pieData = [
+      { name:'👑 Very Popular', y:groups['Very Popular'], color:'#1db954' },
+      { name:'⭐ Popular',       y:groups['Popular'],      color:'#3b82f6' },
+      { name:'😴 Unpopular',    y:groups['Unpopular'],    color:'#4b5563' }
+    ].filter(d=>d.y>0);
+
+    Highcharts.chart('pop-pie-chart', {
+      chart: { type:'pie', backgroundColor:'transparent', style:{fontFamily:'Inter, sans-serif'}, animation:{duration:700} },
+      title: { text:null },
+      tooltip: {
+        formatter() { return `<b>${this.point.name}</b><br/>Số genre: <b>${this.y}</b><br/>Tỷ lệ: <b>${this.percentage.toFixed(1)}%</b>`; },
+        backgroundColor:'#1a1a28', borderColor:'rgba(255,255,255,0.1)', style:{color:'#fff'}
+      },
+      plotOptions: {
+        pie: { innerSize:'55%', borderWidth:3, borderColor:'#0a0a0f',
+          dataLabels:{ enabled:true, formatter(){return this.y>0?`${this.point.name}<br/>${this.percentage.toFixed(0)}%`:null;}, style:{color:'#fff',textOutline:'none',fontSize:'12px'} }
+        }
+      },
+      series: [{ name:'Genre', data:pieData }],
+      credits:{enabled:false}, exporting:{enabled:false}
+    });
+
+    document.getElementById('pop-legend').innerHTML = pieData.map(d => {
+      const pct = total>0 ? Math.round(d.y/total*100) : 0;
+      return `<div class="pie-legend-item"><div class="legend-dot" style="background:${d.color};"></div><div class="legend-label">${d.name}</div><div><div class="legend-count" style="color:${d.color};">${d.y}</div><div class="legend-pct">${pct}%</div></div></div>`;
+    }).join('');
+
+    const tbody = document.getElementById('pop-tbody');
+    const sorted = [...arr].sort((a,b) => {
+      const aa = +(a.avg_popularity||a.avg||a.average||a.popularity||0);
+      const bb = +(b.avg_popularity||b.avg||b.average||b.popularity||0);
+      return bb-aa;
+    });
+    tbody.innerHTML = sorted.map((d,i) => {
+      const avg = +(d.avg_popularity||d.avg||d.average||d.popularity||0).toFixed(1);
+      const lvl = d.level||d.category||d.classification||'';
+      const key = classifyPop(avg, lvl);
+      const bc  = key==='Very Popular'?'badge-green': key==='Popular'?'badge-blue':'badge-red';
+      const ic  = key==='Very Popular'?'👑': key==='Popular'?'⭐':'😴';
+      const genre = escHtml(String(d.genre||d.Genre||d.name||'Unknown'));
+      return `<tr><td>${i+1}</td><td>${genre}</td><td style="font-weight:700;">${avg}</td><td><span class="badge ${bc}">${ic} ${key}</span></td></tr>`;
+    }).join('');
+
+  } catch(e) {
+    document.getElementById('pop-pie-chart').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><p>${e.message}</p></div>`;
+  }
+}
+
+function classifyPop(avg, existing) {
+  // existing có thể là string hoặc giá trị khác, luôn convert sang string trước
+  const existingStr = existing ? String(existing) : '';
+  if (existingStr) {
+    const l = existingStr.toLowerCase();
+    if (l.includes('very') || l.includes('high') || l.includes('hot')) return 'Very Popular';
+    if (l.includes('unpop') || l.includes('low') || l.includes('cold')) return 'Unpopular';
+    // 'Popular' (không có 'very') → Popular
+    if (l.includes('popular')) return 'Popular';
+    // 'Quý' strings từ classify() không liên quan, bỏ qua
+  }
+  if (avg >= 70) return 'Very Popular';
+  if (avg >= 40) return 'Popular';
+  return 'Unpopular';
+}
+
+// ── ADD ──
+async function addNewSong() {
+  const id     = document.getElementById('new-id').value.trim();
+  const name   = document.getElementById('new-name').value.trim();
+  const artist = document.getElementById('new-artist').value.trim();
+  if (!id||!name||!artist) { showToast('⚠️ Vui lòng điền đầy đủ Track ID, Tên bài hát và Artist', 'error'); return; }
+
+  const payload = {
+    track_id:      id,
+    track_name:    name,
+    artist_name:   artist,
+    genre:         document.getElementById('new-genre').value.trim() || null,
+    label:         document.getElementById('new-label').value.trim() || null,
+    country:       document.getElementById('new-country').value.trim() || null,
+    release_year:  parseInt(document.getElementById('new-year').value)      || null,
+    release_month: parseInt(document.getElementById('new-month').value)     || null,
+    stream_count:  parseInt(document.getElementById('new-stream').value)    || 0,
+    popularity:    parseInt(document.getElementById('new-pop').value)       || 0,
+    loudness:      parseFloat(document.getElementById('new-loudness').value)|| null,
+    duration_ms:   parseInt(document.getElementById('new-duration').value)  || null,
+  };
+
+  try {
+    const res  = await fetch(`${API}/new`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.error) { showToast('❌ ' + data.error, 'error'); return; }
+    showToast('✅ ' + (data.message || 'Thêm thành công!'), 'success');
+    clearAddForm();
+    await loadSummaryCache();
+    loadOverviewStats();
+    loadFilterDropdowns();
+  } catch(e) { showToast('❌ Lỗi: ' + e.message, 'error'); }
+}
+
+function clearAddForm() {
+  ['new-id','new-name','new-artist','new-genre','new-label','new-country','new-year','new-month','new-stream','new-pop','new-loudness','new-duration'].forEach(id=>{ document.getElementById(id).value=''; });
+}
+
+// ── DELETE ──
+async function deleteSong() {
+  const id = document.getElementById('delete-id').value.trim();
+  if (!id) { showToast('⚠️ Vui lòng nhập Track ID cần xóa', 'error'); return; }
+  if (!confirm(`Bạn chắc chắn muốn xóa "${id}"?\nThao tác này KHÔNG THỂ hoàn tác!`)) return;
+  try {
+    const res  = await fetch(`${API}/remove?id=${encodeURIComponent(id)}`, { method:'DELETE' });
+    const data = await res.json();
+    if (data.error) { showToast('❌ ' + data.error, 'error'); return; }
+    showToast('🗑️ ' + (data.message||'Xóa thành công!'), 'success');
+    document.getElementById('delete-id').value = '';
+    await loadSummaryCache();
+    loadOverviewStats();
+  } catch(e) { showToast('❌ Lỗi: ' + e.message, 'error'); }
+}
+
+// ── TABLE RENDER ──
+function renderTable(rows) {
+  if (!rows||!rows.length) return '<div class="empty-state"><div class="empty-icon">📭</div><p>Không có dữ liệu</p></div>';
+  const keys = Object.keys(rows[0]);
+  const badgeCols = { genre:'badge-green', label:'badge-purple', country:'badge-blue' };
+  return `<table>
+    <thead><tr>${keys.map(k=>`<th>${escHtml(k)}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${keys.map(k=>{
+      const v = r[k] ?? '—';
+      const sv = String(v);
+      if (badgeCols[k] && v && v!=='—') return `<td><span class="badge ${badgeCols[k]}">${escHtml(sv)}</span></td>`;
+      if (k==='stream_count') return `<td>${fmtNum(v)}</td>`;
+      return `<td>${escHtml(sv)}</td>`;
+    }).join('')}</tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ── UTILS ──
+function fmtNum(n) {
+  if (n===null||n===undefined||n==='—') return '—';
+  const num = +n;
+  if (isNaN(num)) return String(n);
+  if (num>=1e9) return (num/1e9).toFixed(1)+'B';
+  if (num>=1e6) return (num/1e6).toFixed(1)+'M';
+  if (num>=1e3) return (num/1e3).toFixed(1)+'K';
+  return num.toLocaleString();
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3400);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-container')) {
+    document.querySelectorAll('.suggestions-box').forEach(b => b.classList.remove('open'));
+  }
+});
+</script>
+</body>
+</html>
