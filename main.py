@@ -1,10 +1,20 @@
 from flask import Flask, request, jsonify, send_from_directory 
 from flask_cors import CORS
+from flask_compress import Compress
 import pandas as pd 
 df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
 
 app = Flask(__name__)
 CORS(app)
+Compress(app)
+
+import os
+
+# Serve dashboard tại root URL
+@app.route('/')
+def dashboard():
+    folder = os.path.dirname(os.path.abspath(__file__))
+    return send_from_directory(folder, 'dashboard.html')
 
 from data_processing import (get_all_track, 
                         filter_by_artist, 
@@ -24,7 +34,8 @@ from data_handle import (create_new_track,
                     top_genre,
                     top_year,
                     avg_pop,
-                    month_track_count
+                    month_track_count,
+                    country_stats
                     )
 
 from data_ultilize import(label_stream_count,
@@ -72,7 +83,7 @@ def filter_all():
         year   = request.args.get('year',   type = int)
         label  = request.args.get('label',  type = str)
         country = request.args.get('country',type = str)
-        loudness = request.args.get('country',type = str)
+        loudness = request.args.get('loudness', type = str)
 
         if 'year' in request.args and year is None:
             return jsonify({'error': 'Không hợp lệ, vui lòng nhập đúng định dạng'}), 400 
@@ -189,7 +200,8 @@ def remove():
         if isinstance(remove_song, dict) and 'error' in remove_song:
             return jsonify(remove_song), 400
 
-        return jsonify({'message': 'Đã xóa thành công'}), 201
+        df = remove_song
+        return jsonify({'message': 'Đã xóa thành công'}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -350,8 +362,22 @@ def label_third():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
+
+
+# Thống kê theo quốc gia: số bài và tổng stream
+@app.route('/api/countrystats')
+def country_data():
+    try:
+        result = country_stats(df)
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8888)
+    app.run(port=8888, debug=False)

@@ -123,7 +123,7 @@ def top_year(df: pd.DataFrame, top: int = None):
 
 
 # Độ popularity trung bình theo genre => phân chia thành các loại: Very popular, popular, unpopular 
-def classify(score):
+def classify_popularity(score):
     if score >= 70:
         return 'Very popular'
     elif score >= 40:
@@ -142,15 +142,14 @@ def avg_pop(df: pd.DataFrame):
         .sort_values('popularity', ascending = False)
         .reset_index(drop = True)
         )
-    avg['category'] = avg['popularity'].apply(classify)
+    avg['category'] = avg['popularity'].apply(classify_popularity)
 
     return avg.to_dict(orient = 'records')
 
 
 
 # Số lượng bài theo từng quý của tất cả các năm
-def classify(month: int):
-    
+def classify_quarter(month: int):
     if 1 <= month <= 3:
         return 'Quý I'
     elif 4 <= month <= 6:
@@ -160,12 +159,12 @@ def classify(month: int):
     elif 10 <= month <= 12:
         return 'Quý IV'
     else: 
-        return {'error': 'Tháng phải từ 1 đến 12'}
+        return 'Unknown'
 
 
 def month_track_count(df: pd.DataFrame):
     df = df.copy()
-    df['category'] = df['release_month'].apply(classify)
+    df['category'] = df['release_month'].apply(classify_quarter)
 
     quartercount = (df.groupby('category')['track_id']
                 .nunique()
@@ -176,6 +175,21 @@ def month_track_count(df: pd.DataFrame):
                 )
 
     return quartercount.to_dict(orient = 'records')
+
+
+
+# Thống kê stream count và số bài hát theo quốc gia
+def country_stats(df: pd.DataFrame):
+    stats = (df.groupby('country')
+        .agg(
+            track_count  = ('track_id',    'nunique'),
+            stream_count = ('stream_count', 'sum')
+        )
+        .reset_index()
+        .sort_values('stream_count', ascending = False)
+        .reset_index(drop = True)
+    )
+    return stats.to_dict(orient = 'records')
 
 
 

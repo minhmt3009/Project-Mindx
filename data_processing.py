@@ -1,9 +1,11 @@
 import pandas as pd 
 df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
 
-# Danh sách toàn bộ bài hát
+# Danh sách bài hát (tối ưu payload)
 def get_all_track(df: pd.DataFrame):
-    return df.to_dict(orient = 'records')
+    cols = ['track_id', 'track_name', 'artist_name', 'genre', 'label', 'country', 'release_year', 'stream_count', 'popularity']
+    available_cols = [c for c in cols if c in df.columns]
+    return df[available_cols].to_dict(orient = 'records')
 
 
 
