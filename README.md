@@ -6,12 +6,10 @@ Dự án cuối khóa phân tích dữ liệu Spotify: một trang **dashboard t
 
 ## 1. Dự án này dùng để làm gì?
 
-Nói đơn giản, dự án gồm 2 phần:
+Dự án gồm 2 phần:
 
-1. **Bộ não xử lý dữ liệu (backend – viết bằng Python):** đọc file dữ liệu bài hát Spotify (định dạng CSV), sau đó tính toán, lọc, sắp xếp theo nhiều tiêu chí khác nhau.
-2. **Giao diện xem trực quan (dashboard – file `dashboard.html`):** hiển thị các con số đó dưới dạng biểu đồ, bản đồ thế giới, bảng số liệu... để người dùng không cần biết code vẫn xem và hiểu được dữ liệu.
-
-Nói cách khác: bạn mở dashboard lên trên trình duyệt, mọi thao tác tìm kiếm/lọc/thống kê bạn thấy trên màn hình đều được "hậu trường" xử lý bởi các file Python.
+1. **Xử lý dữ liệu (backend – viết bằng Python):** đọc file dữ liệu bài hát Spotify (định dạng CSV - đã upload lên git hub), sau đó tính toán, lọc, sắp xếp theo nhiều tiêu chí khác nhau.
+2. **Giao diện (dashboard – file `dashboard.html`):** hiển thị các con số đó dưới dạng biểu đồ, bản đồ thế giới, bảng số liệu... để người dùng xem và hiểu được dữ liệu một cách trực quan.
 
 ---
 
@@ -19,10 +17,10 @@ Nói cách khác: bạn mở dashboard lên trên trình duyệt, mọi thao tá
 
 Dashboard được chia thành nhiều khu vực chức năng:
 
-- **📊 Tổng quan Thư viện Spotify** – xem toàn bộ danh sách bài hát, phân trang để không bị quá tải.
-- **🔍 Tìm kiếm bài hát thông minh** – tìm theo mã bài hát (track ID) hoặc theo tên bài hát.
-- **🎛️ Lọc dữ liệu đa tiêu chí thông minh** – lọc kết hợp theo thể loại, nghệ sĩ, năm phát hành, hãng đĩa, quốc gia, độ ồn (loudness) — có thể chọn nhiều tiêu chí cùng lúc.
-- **⚙️ Quản lý kho dữ liệu bài hát** – thêm bài hát mới vào hệ thống hoặc xóa bài hát đã có (mã bài hát được tự sinh tự động).
+- **📊 Tổng quan** – Thống kê sơ bộ, giúp user tiếp xúc với các dữ liệu tổng quát nhất.
+- **🔍 Tìm kiếm** – tìm theo mã bài hát (track ID) hoặc theo tên bài hát.
+- **🎛️ Lọc dữ liệu** – lọc kết hợp theo thể loại, nghệ sĩ, năm phát hành, hãng đĩa, quốc gia, độ ồn (loudness) — có thể chọn nhiều tiêu chí cùng lúc.
+- **⚙️ Quản lý bài hát** – thêm bài hát mới vào hệ thống hoặc xóa bài hát đã có (mã bài hát được tự sinh tự động).
 - **📈 Xếp hạng & thống kê:**
   - Top bài hát có lượt nghe (stream) cao nhất / thấp nhất.
   - Top bài hát phổ biến nhất.
@@ -53,7 +51,7 @@ Dashboard được chia thành nhiều khu vực chức năng:
 
 Dự án sử dụng một file dữ liệu bài hát Spotify ở định dạng **CSV** (`spotify_data_processed.csv`), với các thông tin cho mỗi bài hát như: mã bài hát, tên bài hát, nghệ sĩ, thể loại, quốc gia, hãng đĩa, ngày phát hành, độ ồn, độ phổ biến, số lượt nghe (stream count)...
 
-> ⚠️ **Lưu ý:** Hiện tại đường dẫn tới file dữ liệu đang được ghi cố định trong code (ví dụ: `D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv`). Nếu chạy trên máy khác, cần đổi đường dẫn này cho khớp với vị trí lưu file CSV trên máy đó.
+> ⚠️ **Lưu ý:** Hiện tại đường dẫn tới file dữ liệu đang được ghi cố định trong code. Nếu chạy trên máy khác, cần đổi đường dẫn này cho khớp với vị trí lưu file CSV trên máy đó.
 
 ---
 
@@ -75,13 +73,13 @@ pip install pandas flask flask-cors flask-compress
 ## 6. Cách chạy dự án
 
 1. Đảm bảo file dữ liệu CSV đã có sẵn đúng đường dẫn được khai báo trong các file `.py`.
-2. Mở terminal (cửa sổ dòng lệnh) tại thư mục chứa dự án.
+2. Mở terminal (cửa sổ dòng lệnh) tại thư mục chứa dự án hoặc sử dụng IDE.
 3. Chạy lệnh:
 
    ```bash
    python main.py
    ```
-
+  hoặc chạy trực tiếp trên IDE
 4. Khi thấy máy chủ khởi động thành công, mở trình duyệt web và truy cập:
 
    ```
@@ -92,6 +90,11 @@ pip install pandas flask flask-cors flask-compress
 
 ---
 
+6. Để users khác có thể xem trang web, public qua các phần mềm như: ngrok,...
+
+   cú pháp public: "ngrok http localhost:8888"
+
+   
 ## 7. Danh sách các "cửa ngõ" dữ liệu (API) cho ai muốn tìm hiểu sâu hơn
 
 Đây là các đường dẫn mà dashboard gọi tới để lấy dữ liệu (không cần quan tâm nếu chỉ dùng dashboard):
@@ -118,7 +121,7 @@ pip install pandas flask flask-cors flask-compress
 ## 8. Một số điểm cần lưu ý / hướng cải thiện trong tương lai
 
 - Đường dẫn tới file CSV hiện đang cố định (hardcode), nên cân nhắc chuyển thành đường dẫn tương đối hoặc đọc từ file cấu hình để dễ chia sẻ dự án cho người khác chạy.
-- Dữ liệu bài hát mới thêm/xóa hiện chỉ lưu tạm trong bộ nhớ khi máy chủ đang chạy — khi tắt máy chủ, các thay đổi này có thể chưa được lưu lại vào file CSV gốc.
+- Dữ liệu bài hát mới thêm/xóa hiện chỉ lưu trực tiếp vào file csv gốc.
 - Có thể mở rộng thêm các thống kê khác (ví dụ theo mùa phát hành nhạc, theo mối liên hệ giữa độ ồn và độ phổ biến...) trong tương lai.
 
 ---
