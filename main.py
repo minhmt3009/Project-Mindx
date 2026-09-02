@@ -374,7 +374,7 @@ def country_data():
         return jsonify({'error': str(e)}), 500
 
 
-
+df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
 
 
 
