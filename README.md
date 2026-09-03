@@ -1,8 +1,8 @@
-# 🎧 Spotify Analytics Studio – Dashboard Phân Tích Dữ Liệu Âm Nhạc
+# Spotify Analytics Studio – Dashboard Phân Tích Dữ Liệu Âm Nhạc
 
 Dự án cuối khóa phân tích dữ liệu Spotify: một trang **dashboard trực quan** giúp xem, tìm kiếm, lọc và thống kê hàng loạt khía cạnh của một bộ dữ liệu bài hát (thể loại, nghệ sĩ, quốc gia, hãng đĩa, lượt nghe, độ phổ biến...), kèm theo một **máy chủ web (backend)** cung cấp dữ liệu cho dashboard.
 
----
+
 
 ## 1. Dự án này dùng để làm gì?
 
@@ -11,27 +11,27 @@ Dự án gồm 2 phần:
 1. **Xử lý dữ liệu (backend – viết bằng Python):** đọc file dữ liệu bài hát Spotify (định dạng CSV - đã upload lên git hub), sau đó tính toán, lọc, sắp xếp theo nhiều tiêu chí khác nhau.
 2. **Giao diện (dashboard – file `dashboard.html`):** hiển thị các con số đó dưới dạng biểu đồ, bản đồ thế giới, bảng số liệu... để người dùng xem và hiểu được dữ liệu một cách trực quan.
 
----
+
 
 ## 2. Các tính năng chính
 
 Dashboard được chia thành nhiều khu vực chức năng:
 
-- **📊 Tổng quan** – Thống kê sơ bộ, giúp user tiếp xúc với các dữ liệu tổng quát nhất.
-- **🔍 Tìm kiếm** – tìm theo mã bài hát (track ID) hoặc theo tên bài hát.
-- **🎛️ Lọc dữ liệu** – lọc kết hợp theo thể loại, nghệ sĩ, năm phát hành, hãng đĩa, quốc gia, độ ồn (loudness) — có thể chọn nhiều tiêu chí cùng lúc.
-- **⚙️ Quản lý bài hát** – thêm bài hát mới vào hệ thống hoặc xóa bài hát đã có (mã bài hát được tự sinh tự động).
-- **📈 Xếp hạng & thống kê:**
+- **Tổng quan** – Thống kê sơ bộ, giúp user tiếp xúc với các dữ liệu tổng quát nhất.
+- **Tìm kiếm** – tìm theo mã bài hát (track ID) hoặc theo tên bài hát.
+- **Lọc dữ liệu** – lọc kết hợp theo thể loại, nghệ sĩ, năm phát hành, hãng đĩa, quốc gia, độ ồn (loudness) — có thể chọn nhiều tiêu chí cùng lúc.
+- **Quản lý bài hát** – thêm bài hát mới vào hệ thống hoặc xóa bài hát đã có (mã bài hát được tự sinh tự động).
+- **Xếp hạng & thống kê:**
   - Top bài hát có lượt nghe (stream) cao nhất / thấp nhất.
   - Top bài hát phổ biến nhất.
   - Tổng lượt nghe theo từng thể loại nhạc, xếp hạng.
   - Tổng lượt nghe theo từng năm.
   - Độ phổ biến trung bình theo thể loại, tự động phân loại thành "Rất phổ biến / Phổ biến / Ít phổ biến".
   - Số lượng bài hát phát hành theo từng quý trong năm.
-- **🏷️ Phân tích chuyên sâu Hãng đĩa (Label)** – số bài hát, tổng lượt nghe, và số nghệ sĩ ký hợp đồng với mỗi hãng đĩa (dùng để đánh giá độ uy tín của hãng).
-- **🌍 Phân tích Bản đồ Quốc gia** – thống kê số bài hát và lượt nghe theo từng quốc gia, hiển thị trực quan trên bản đồ thế giới.
+- **Phân tích chuyên sâu Hãng đĩa (Label)** – số bài hát, tổng lượt nghe, và số nghệ sĩ ký hợp đồng với mỗi hãng đĩa (dùng để đánh giá độ uy tín của hãng).
+- **Phân tích Bản đồ Quốc gia** – thống kê số bài hát và lượt nghe theo từng quốc gia, hiển thị trực quan trên bản đồ thế giới.
 
----
+
 
 ## 3. Cấu trúc các file trong dự án
 
@@ -45,15 +45,15 @@ Dashboard được chia thành nhiều khu vực chức năng:
 
 > Có thể hình dung: `dashboard.html` là "mặt tiền cửa hàng", còn 3 file Python còn lại (`data_processing.py`, `data_handle.py`, `data_ultilize.py`) là "kho hàng phía sau", và `main.py` là "nhân viên thu ngân" đứng giữa, nhận yêu cầu từ khách rồi lấy đúng hàng từ đúng kho.
 
----
+
 
 ## 4. Dữ liệu đầu vào
 
 Dự án sử dụng một file dữ liệu bài hát Spotify ở định dạng **CSV** (`spotify_data_processed.csv`), với các thông tin cho mỗi bài hát như: mã bài hát, tên bài hát, nghệ sĩ, thể loại, quốc gia, hãng đĩa, ngày phát hành, độ ồn, độ phổ biến, số lượt nghe (stream count)...
 
-> ⚠️ **Lưu ý:** Hiện tại đường dẫn tới file dữ liệu đang được ghi cố định trong code. Nếu chạy trên máy khác, cần đổi đường dẫn này cho khớp với vị trí lưu file CSV trên máy đó.
+> **Lưu ý:** Hiện tại đường dẫn tới file dữ liệu đang được ghi cố định trong code. Nếu chạy trên máy khác, cần đổi đường dẫn này cho khớp với vị trí lưu file CSV trên máy đó.
 
----
+
 
 ## 5. Yêu cầu để chạy được dự án
 
@@ -68,7 +68,7 @@ Cài đặt nhanh bằng lệnh:
 pip install pandas flask flask-cors flask-compress
 ```
 
----
+
 
 ## 6. Cách chạy dự án
 
@@ -88,7 +88,7 @@ pip install pandas flask flask-cors flask-compress
 
 5. Dashboard sẽ hiện ra, có thể bắt đầu xem, tìm kiếm, lọc và thống kê dữ liệu.
 
----
+
 
 6. Để users khác có thể xem trang web, public qua các phần mềm như: ngrok,...
 
@@ -116,14 +116,10 @@ pip install pandas flask flask-cors flask-compress
 | `/api/label1`, `/api/label2`, `/api/label3` | Số bài hát / tổng lượt nghe / số nghệ sĩ theo từng hãng đĩa |
 | `/api/countrystats` | Thống kê số bài hát và lượt nghe theo quốc gia |
 
----
+
 
 ## 8. Một số điểm cần lưu ý / hướng cải thiện trong tương lai
 
 - Đường dẫn tới file CSV hiện đang cố định (hardcode), nên cân nhắc chuyển thành đường dẫn tương đối hoặc đọc từ file cấu hình để dễ chia sẻ dự án cho người khác chạy.
 - Dữ liệu bài hát mới thêm/xóa hiện chỉ lưu trực tiếp vào file csv gốc.
 - Có thể mở rộng thêm các thống kê khác (ví dụ theo mùa phát hành nhạc, theo mối liên hệ giữa độ ồn và độ phổ biến...) trong tương lai.
-
----
-
-*Dự án được thực hiện trong khuôn khổ Project cuối khóa Data Science.*
