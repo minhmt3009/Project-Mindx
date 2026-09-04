@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spotify Analytics Studio – Master Dashboard</title>
   <meta name="description"
-    content="Dashboard phân tích âm nhạc Spotify chuyên nghiệp – Stream, Popularity, Label, Country & Quý" />
+    content="Professional Spotify Analytics Studio – Streams, Popularity, Labels, Countries & Quarters" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
@@ -1583,31 +1583,31 @@
       <nav class="sidebar-menu">
         <button class="sidebar-btn active" onclick="switchTab('overview')" id="tab-overview">
           <span class="tab-icon">📊</span>
-          <span>Tổng quan</span>
+          <span>Overview</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('search')" id="tab-search">
           <span class="tab-icon">🔍</span>
-          <span>Tìm kiếm</span>
+          <span>Search</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('filter')" id="tab-filter">
           <span class="tab-icon">🎛️</span>
-          <span>Lọc dữ liệu</span>
+          <span>Filter</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('label')" id="tab-label">
           <span class="tab-icon">🏷️</span>
-          <span>Hãng đĩa (Label)</span>
+          <span>Record Labels</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('country')" id="tab-country">
           <span class="tab-icon">🌍</span>
-          <span>Bản đồ Quốc gia</span>
+          <span>Country Map</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('stats')" id="tab-stats">
           <span class="tab-icon">📈</span>
-          <span>Thống kê Quý</span>
+          <span>Quarterly Stats</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('manage')" id="tab-manage">
           <span class="tab-icon">⚙️</span>
-          <span>Quản lý kho nhạc</span>
+          <span>Music Manager</span>
         </button>
       </nav>
 
@@ -1635,10 +1635,10 @@
       <header class="top-header">
         <div class="header-search-hint">
           <span>🎧</span>
-          <span>Hệ thống phân tích & trực quan hóa dữ liệu Spotify Web API</span>
+          <span>Spotify Web API Data Analytics & Visualization Platform</span>
         </div>
         <div class="bg-switch-control">
-          <span>🌌 Nền âm nhạc sống động (Tự động đổi cảnh)</span>
+          <span>🌌 Dynamic Ambient Canvas (Auto-Cycle)</span>
         </div>
       </header>
 
@@ -1648,8 +1648,8 @@
         <!-- ════════════════ TAB 1: OVERVIEW ════════════════ -->
         <section id="panel-overview" class="panel active">
           <div class="view-header">
-            <h1 class="view-title">📊 Tổng quan Thư viện Spotify</h1>
-            <p class="view-desc">Toàn cảnh các chỉ số cốt lõi, bảng xếp hạng phân cấp và xu hướng tăng trưởng âm nhạc
+            <h1 class="view-title">📊 Spotify Library Overview</h1>
+            <p class="view-desc">Holistic overview of core metrics, tiered rankings, and music growth trends based on normalized Spotify Web API data.
             </p>
           </div>
 
@@ -1657,7 +1657,7 @@
             <div class="stat-card c-green">
               <div class="stat-icon">🎵</div>
               <div class="stat-val" id="stat-total-songs">—</div>
-              <div class="stat-label">Tổng số bài hát</div>
+              <div class="stat-label">Total Tracks</div>
             </div>
             <div class="stat-card c-purple">
               <div class="stat-icon">🏆</div>
@@ -1672,12 +1672,12 @@
             <div class="stat-card c-pink">
               <div class="stat-icon">🏷️</div>
               <div class="stat-val" id="stat-total-labels">—</div>
-              <div class="stat-label">Hãng phát hành (Labels)</div>
+              <div class="stat-label">Record Labels</div>
             </div>
             <div class="stat-card c-orange">
               <div class="stat-icon">🌍</div>
               <div class="stat-val" id="stat-total-countries">—</div>
-              <div class="stat-label">Quốc gia có mặt</div>
+              <div class="stat-label">Countries Represented</div>
             </div>
           </div>
 
@@ -1685,17 +1685,16 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title">
-                🏆 Bảng xếp hạng phân cấp
-                <span class="card-subtitle">💡 Click vào bất kỳ cột nào để mở danh sách toàn bộ bài hát cùng mức số
-                  liệu</span>
+                🏆 Tiered Rankings
+                <span class="card-subtitle">💡 Click any bar to view the full list of tracks in this tier</span>
               </div>
               <div class="controls-group">
-                <span class="control-label">Xếp hạng theo:</span>
+                <span class="control-label">Rank by:</span>
                 <select class="select-styled" id="rank-metric-select" onchange="renderRankingChart()">
-                  <option value="stream">🎧 Lượt Stream</option>
-                  <option value="popular">⭐ Độ phổ biến</option>
+                  <option value="stream">🎧 Streams</option>
+                  <option value="popular">⭐ Popularity</option>
                 </select>
-                <span class="control-label">Top mức hạng:</span>
+                <span class="control-label">Top tiers:</span>
                 <input class="input-styled" list="datalist-rank-n" id="rank-n-input" value="10" style="width:84px;"
                   onchange="renderRankingChart()" />
                 <datalist id="datalist-rank-n">
@@ -1716,26 +1715,26 @@
             <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;">
               <div>
                 <div class="card-header">
-                  <div class="card-title">📈 Xu hướng Stream theo Năm</div>
+                  <div class="card-title">📈 Stream Trends by Year</div>
                 </div>
                 <div id="chart-stream-timeline" style="min-height:280px;"></div>
 
                 <!-- Timeline Milestone Mini Badges -->
                 <div class="timeline-insights-row">
                   <div class="mini-stat-badge">
-                    <div class="msb-title">Năm Đỉnh Cao</div>
+                    <div class="msb-title">Peak Year</div>
                     <div class="msb-val">2020 👑</div>
                     <div class="msb-sub">464,880,000 streams</div>
                   </div>
                   <div class="mini-stat-badge">
-                    <div class="msb-title">Tăng Trưởng Nhanh</div>
+                    <div class="msb-title">Fastest Growth</div>
                     <div class="msb-val">2016 ➔ 2018 🚀</div>
-                    <div class="msb-sub">+48.2% lưu lượng</div>
+                    <div class="msb-sub">+48.2% volume</div>
                   </div>
                   <div class="mini-stat-badge">
-                    <div class="msb-title">Mức Trung Bình</div>
-                    <div class="msb-val">~400M / Năm ⚡</div>
-                    <div class="msb-sub">Duy trì ổn định</div>
+                    <div class="msb-title">Average Volume</div>
+                    <div class="msb-val">~400M / Year ⚡</div>
+                    <div class="msb-sub">Consistent momentum</div>
                   </div>
                 </div>
               </div>
@@ -1745,8 +1744,8 @@
                 <div class="icc-left">
                   <div class="icc-icon">💡</div>
                   <div class="icc-text-wrapper">
-                    <div class="icc-title" id="overview-fact-title">Phân tích Xu hướng Stream</div>
-                    <div class="icc-desc" id="overview-fact-desc">Đang tải thông tin phân tích...</div>
+                    <div class="icc-title" id="overview-fact-title">Stream Trend Analysis</div>
+                    <div class="icc-desc" id="overview-fact-desc">Loading insights...</div>
                   </div>
                 </div>
                 <div class="icc-nav">
@@ -1760,12 +1759,12 @@
             <!-- Column 2: Genre Breakdown -->
             <div class="card">
               <div class="card-header">
-                <div class="card-title">🎸 Phân bố theo Thể loại (Genre)</div>
+                <div class="card-title">🎸 Genre Distribution</div>
                 <div class="controls-group">
                   <select class="select-styled" id="genre-metric-select" onchange="renderGenreChart()"
                     style="padding:6px 28px 6px 10px;font-size:12px;">
-                    <option value="stream">🎧 Theo Tổng Stream</option>
-                    <option value="count">🎵 Theo Số lượng bài</option>
+                    <option value="stream">🎧 By Total Streams</option>
+                    <option value="count">🎵 By Number of Tracks</option>
                   </select>
                 </div>
               </div>
@@ -1779,8 +1778,8 @@
         <!-- ════════════════ TAB 2: SEARCH ════════════════ -->
         <section id="panel-search" class="panel">
           <div class="view-header">
-            <h1 class="view-title">🔍 Tìm kiếm bài hát thông minh</h1>
-            <p class="view-desc">Tìm theo Track ID với tiền tố tự động hoặc theo tên bài hát có gợi ý trực quan</p>
+            <h1 class="view-title">🔍 Smart Track Search</h1>
+            <p class="view-desc">Search by Track ID with automated prefix or by song title with instant visual suggestions</p>
           </div>
 
           <div class="card">
@@ -1788,12 +1787,12 @@
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                 <input type="radio" name="search-mode" value="id" checked onchange="handleSearchModeChange()"
                   style="accent-color:var(--green);width:16px;height:16px;" />
-                <span style="font-weight:600;font-size:13px;">🔖 Tìm theo Track ID</span>
+                <span style="font-weight:600;font-size:13px;">🔖 Search by Track ID</span>
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:14px;">
                 <input type="radio" name="search-mode" value="song" onchange="handleSearchModeChange()"
                   style="accent-color:var(--green);width:16px;height:16px;" />
-                <span style="font-weight:600;font-size:13px;">🎵 Tìm theo Tên bài hát</span>
+                <span style="font-weight:600;font-size:13px;">🎵 Search by Song Title</span>
               </label>
             </div>
 
@@ -1803,13 +1802,13 @@
                 <div class="search-input-box">
                   <div class="search-prefix-badge">TRK-</div>
                   <input type="text" class="search-input-field" id="search-id-input"
-                    placeholder="Nhập số ID (ví dụ: 00001, 19990)..." oninput="handleIdInput()"
+                    placeholder="Enter ID number (e.g., 00001, 19990)..." oninput="handleIdInput()"
                     onkeydown="if(event.key==='Enter')executeIdSearch()" />
                 </div>
                 <div class="suggest-dropdown" id="suggest-id-dropdown"></div>
               </div>
-              <button class="btn btn-primary" onclick="executeIdSearch()">🔍 Tìm kiếm</button>
-              <button class="btn btn-secondary" onclick="clearSearchState()">✕ Xóa</button>
+              <button class="btn btn-primary" onclick="executeIdSearch()">🔍 Search</button>
+              <button class="btn btn-secondary" onclick="clearSearchState()">✕ Clear</button>
             </div>
 
             <!-- Song Name Search Box -->
@@ -1817,13 +1816,13 @@
               <div class="search-container">
                 <div class="search-input-box">
                   <div class="search-prefix-badge" style="background:var(--purple);">🎵</div>
-                  <input type="text" class="search-input-field" id="search-song-input" placeholder="Gõ tên bài hát..."
+                  <input type="text" class="search-input-field" id="search-song-input" placeholder="Type song title..."
                     oninput="handleSongInput()" onkeydown="if(event.key==='Enter')executeSongSearch()" />
                 </div>
                 <div class="suggest-dropdown" id="suggest-song-dropdown"></div>
               </div>
-              <button class="btn btn-primary" onclick="executeSongSearch()">🔍 Tìm kiếm</button>
-              <button class="btn btn-secondary" onclick="clearSearchState()">✕ Xóa</button>
+              <button class="btn btn-primary" onclick="executeSongSearch()">🔍 Search</button>
+              <button class="btn btn-secondary" onclick="clearSearchState()">✕ Clear</button>
             </div>
           </div>
 
@@ -1831,9 +1830,9 @@
           <div id="recommendations-box">
             <div class="card">
               <div class="card-header">
-                <div class="card-title">🎲 Đề xuất ngẫu nhiên bài hát trong kho dữ liệu</div>
+                <div class="card-title">🎲 Random Recommended Tracks from Library</div>
                 <button class="btn btn-secondary" onclick="refreshRandomRecommendations()"
-                  style="padding:5px 12px;font-size:12px;">🔄 Đổi danh sách</button>
+                  style="padding:5px 12px;font-size:12px;">🔄 Shuffle Tracks</button>
               </div>
               <div class="rec-grid" id="recommendations-grid">
                 <div class="loader-box">
@@ -1850,28 +1849,27 @@
         <!-- ════════════════ TAB 3: FILTER ════════════════ -->
         <section id="panel-filter" class="panel">
           <div class="view-header">
-            <h1 class="view-title">🎛️ Lọc dữ liệu đa tiêu chí thông minh</h1>
-            <p class="view-desc">Gợi ý theo ngữ cảnh (chọn Genre sẽ tự động lọc danh sách Artist tương ứng) kèm bảng
-              chọn chữ cái A-Z tiện lợi.</p>
+            <h1 class="view-title">🎛️ Multi-Criteria Smart Filter</h1>
+            <p class="view-desc">Context-aware filtering (selecting a Genre automatically filters associated Artists) with an intuitive A-Z alphabet bar.</p>
           </div>
 
           <div class="card">
             <div class="form-grid">
               <div class="form-group">
-                <label class="form-label">🎸 Thể loại (Genre)</label>
+                <label class="form-label">🎸 Genre</label>
                 <input class="input-styled" list="dl-filter-genre" id="filter-genre-input"
-                  placeholder="Chọn hoặc gõ genre..." oninput="onFilterCriteriaChanged()" />
+                  placeholder="Select or type genre..." oninput="onFilterCriteriaChanged()" />
                 <datalist id="dl-filter-genre"></datalist>
               </div>
 
               <div class="form-group" style="grid-column: span 2;">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <label class="form-label">🎤 Nghệ sĩ (Artist) <span id="artist-filtered-count"
+                  <label class="form-label">🎤 Artist <span id="artist-filtered-count"
                       style="color:var(--green);font-weight:400;text-transform:none;"></span></label>
-                  <span style="font-size:11px;color:var(--t3);">Chọn chữ cái để lọc nhanh</span>
+                  <span style="font-size:11px;color:var(--t3);">Select letter for quick jump</span>
                 </div>
                 <input class="input-styled" list="dl-filter-artist" id="filter-artist-input"
-                  placeholder="Chọn hoặc gõ tên nghệ sĩ..." />
+                  placeholder="Select or type artist name..." />
                 <datalist id="dl-filter-artist"></datalist>
 
                 <!-- ALPHABET QUICK PICKER -->
@@ -1879,28 +1877,28 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">📅 Năm phát hành</label>
+                <label class="form-label">📅 Release Year</label>
                 <input class="input-styled" list="dl-filter-year" id="filter-year-input"
-                  placeholder="Chọn hoặc gõ năm..." />
+                  placeholder="Select or type year..." />
                 <datalist id="dl-filter-year"></datalist>
               </div>
               <div class="form-group">
-                <label class="form-label">🏷️ Hãng đĩa (Label)</label>
+                <label class="form-label">🏷️ Record Label</label>
                 <input class="input-styled" list="dl-filter-label" id="filter-label-input"
-                  placeholder="Chọn hoặc gõ label..." />
+                  placeholder="Select or type label..." />
                 <datalist id="dl-filter-label"></datalist>
               </div>
               <div class="form-group">
-                <label class="form-label">🌍 Quốc gia (Country)</label>
+                <label class="form-label">🌍 Country</label>
                 <input class="input-styled" list="dl-filter-country" id="filter-country-input"
-                  placeholder="Chọn hoặc gõ quốc gia..." />
+                  placeholder="Select or type country..." />
                 <datalist id="dl-filter-country"></datalist>
               </div>
             </div>
 
             <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-              <button class="btn btn-primary" onclick="executeFilter()">🔍 Áp dụng bộ lọc</button>
-              <button class="btn btn-secondary" onclick="resetFilterInputs()">✕ Xóa bộ lọc</button>
+              <button class="btn btn-primary" onclick="executeFilter()">🔍 Apply Filters</button>
+              <button class="btn btn-secondary" onclick="resetFilterInputs()">✕ Reset Filter</button>
               <span id="filter-results-badge" class="badge badge-green"
                 style="display:none;font-size:12px;padding:6px 14px;"></span>
             </div>
@@ -1912,19 +1910,19 @@
         <!-- ════════════════ TAB 4: LABEL ════════════════ -->
         <section id="panel-label" class="panel">
           <div class="view-header">
-            <h1 class="view-title">🏷️ Phân tích chuyên sâu Hãng đĩa (Label)</h1>
-            <p class="view-desc">So sánh hiệu suất và phân tích thị phần giữa các hãng âm nhạc</p>
+            <h1 class="view-title">🏷️ Record Label In-Depth Analytics</h1>
+            <p class="view-desc">Compare commercial performance and analyze market share among record labels</p>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📊 Biểu đồ xà ngang phân tích Label</div>
+              <div class="card-title">📊 Record Label Performance Breakdown</div>
               <div class="controls-group">
-                <span class="control-label">Chỉ số:</span>
+                <span class="control-label">Metric:</span>
                 <select class="select-styled" id="label-metric-select" onchange="renderLabelChart()">
-                  <option value="stream">🎧 Tổng Stream Count</option>
-                  <option value="track">🎵 Số lượng Bài hát</option>
-                  <option value="artist">🎤 Số lượng Nghệ sĩ</option>
+                  <option value="stream">🎧 Total Stream Count</option>
+                  <option value="track">🎵 Number of Tracks</option>
+                  <option value="artist">🎤 Number of Artists</option>
                 </select>
                 <span class="control-label">Top:</span>
                 <input class="input-styled" list="dl-label-n" id="label-n-input" value="10" style="width:84px;"
@@ -1942,7 +1940,7 @@
             <!-- COMPREHENSIVE CONCLUSION -->
             <div class="conclusion-container">
               <div class="conclusion-header">
-                <span>💡 Báo cáo Phân tích & Đánh giá Uy tín Hãng đĩa</span>
+                <span>💡 Record Label Market Share & Prestige Analysis Report</span>
               </div>
               <div class="conclusion-grid" id="label-conclusion-grid">
                 <div class="loader-box">
@@ -1956,18 +1954,18 @@
         <!-- ════════════════ TAB 5: COUNTRY ════════════════ -->
         <section id="panel-country" class="panel">
           <div class="view-header">
-            <h1 class="view-title">🌍 Phân tích Bản đồ Quốc gia & Fun Facts</h1>
-            <p class="view-desc">World Heatmap tương tác – Click vào từng quốc gia để truy xuất danh mục bài hát</p>
+            <h1 class="view-title">🌍 Global Country Map & Market Insights</h1>
+            <p class="view-desc">Interactive World Heatmap – Click any country to explore its localized catalog</p>
           </div>
 
           <div class="card">
             <div class="card-header">
               <div class="card-title">🗺️ World Music Heatmap</div>
               <div class="controls-group">
-                <span class="control-label">Tô màu theo:</span>
+                <span class="control-label">Color scale:</span>
                 <select class="select-styled" id="map-metric-select" onchange="redrawMap()">
                   <option value="stream">🎧 Stream Count</option>
-                  <option value="track">🎵 Số lượng Bài hát</option>
+                  <option value="track">🎵 Number of Tracks</option>
                 </select>
               </div>
             </div>
@@ -1975,7 +1973,7 @@
             <div id="world-map-container"
               style="min-height:460px;border-radius:14px;overflow:hidden;border:1px solid var(--border);">
               <div class="loader-box" style="min-height:460px;">
-                <div class="spin-ring"></div>&nbsp;Đang tải bản đồ thế giới...
+                <div class="spin-ring"></div>&nbsp;Loading world map...
               </div>
             </div>
 
@@ -1984,29 +1982,29 @@
               <div class="fact-card">
                 <div class="fact-icon">🏆</div>
                 <div class="fact-content">
-                  <h5 id="fact-top-stream-country">Thị trường dẫn đầu</h5>
-                  <p id="fact-top-stream-desc">Đang tổng hợp dữ liệu...</p>
+                  <h5 id="fact-top-stream-country">Leading Market</h5>
+                  <p id="fact-top-stream-desc">Aggregating country metrics...</p>
                 </div>
               </div>
               <div class="fact-card">
                 <div class="fact-icon">⚡</div>
                 <div class="fact-content">
-                  <h5 id="fact-efficiency-country">Hiệu suất Stream/Bài</h5>
-                  <p id="fact-efficiency-desc">Đang tính toán chỉ số trung bình...</p>
+                  <h5 id="fact-efficiency-country">Stream Efficiency / Track</h5>
+                  <p id="fact-efficiency-desc">Calculating averages...</p>
                 </div>
               </div>
               <div class="fact-card">
                 <div class="fact-icon">🌐</div>
                 <div class="fact-content">
-                  <h5>Độ phủ Thị trường</h5>
-                  <p id="fact-coverage-desc">Dữ liệu phân bố trên nhiều quốc gia trải dài khắp các châu lục.</p>
+                  <h5>Market Footprint</h5>
+                  <p id="fact-coverage-desc">Catalog distribution spans multiple countries across continents.</p>
                 </div>
               </div>
               <div class="fact-card">
                 <div class="fact-icon">💡</div>
                 <div class="fact-content">
-                  <h5>Fun Fact Âm nhạc</h5>
-                  <p id="fact-music-tip">Click vào bất kỳ quốc gia nào trên bản đồ để khám phá toàn bộ bài hát bản địa!
+                  <h5>Music Fun Fact</h5>
+                  <p id="fact-music-tip">Click any country on the map to explore localized tracks and stats!
                   </p>
                 </div>
               </div>
@@ -2017,8 +2015,8 @@
           <div id="country-tracks-panel" style="display:none;margin-top:24px;">
             <div class="card">
               <div class="card-header">
-                <div class="card-title" id="country-panel-title">📋 Danh sách bài hát</div>
-                <button class="btn btn-secondary" onclick="closeCountryPanel()">✕ Đóng danh sách</button>
+                <div class="card-title" id="country-panel-title">📋 Track Catalog</div>
+                <button class="btn btn-secondary" onclick="closeCountryPanel()">✕ Close List</button>
               </div>
               <div id="country-tracks-table" class="table-responsive"></div>
             </div>
@@ -2028,21 +2026,21 @@
         <!-- ════════════════ TAB 6: STATISTICS ════════════════ -->
         <section id="panel-stats" class="panel">
           <div class="view-header">
-            <h1 class="view-title">📈 Thống kê Quý & Thị phần Quốc gia</h1>
-            <p class="view-desc">Phân tích tính chu kỳ theo Quý phát hành và bảng xếp hạng quốc gia</p>
+            <h1 class="view-title">📈 Quarterly Release Statistics & Country Shares</h1>
+            <p class="view-desc">Seasonal release cycles and country market rankings</p>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📅 Phân tích Phát hành theo Quý (Seasonality Trends)</div>
+              <div class="card-title">📅 Quarterly Seasonality & Release Trends</div>
               <div class="controls-group">
-                <span class="control-label">Lọc quý:</span>
+                <span class="control-label">Filter Quarter:</span>
                 <select class="select-styled" id="quarter-filter-select" onchange="renderQuarterView()">
-                  <option value="all">📋 Tất cả Quý</option>
-                  <option value="1">Quý I (Tháng 1–3)</option>
-                  <option value="2">Quý II (Tháng 4–6)</option>
-                  <option value="3">Quý III (Tháng 7–9)</option>
-                  <option value="4">Quý IV (Tháng 10–12)</option>
+                  <option value="all">📋 All Quarters</option>
+                  <option value="1">Quarter I (Jan–Mar)</option>
+                  <option value="2">Quarter II (Apr–Jun)</option>
+                  <option value="3">Quarter III (Jul–Sep)</option>
+                  <option value="4">Quarter IV (Oct–Dec)</option>
                 </select>
               </div>
             </div>
@@ -2057,23 +2055,17 @@
             <!-- Quarter Comparison Deviation Chart -->
             <div class="grid-2" style="margin-top:10px;">
               <div>
-                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">📊 Số lượng bài hát theo từng Quý</div>
+                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">📊 Number of Tracks by Quarter</div>
                 <div id="chart-quarter-column" style="min-height:280px;"></div>
               </div>
               <div>
-                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">💡 Phân tích Xu hướng Mùa vụ
+                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">💡 Seasonal Trend Analysis
                   (Seasonality)</div>
                 <div
                   style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;line-height:1.7;font-size:13px;color:var(--t2);">
-                  <p style="margin-bottom:12px;">🍂 <strong style="color:var(--pink);">Quý IV (Cuối năm):</strong> Đạt
-                    lượng bài phát hành cao nhất với <strong style="color:#fff;">5,094 bài</strong>. Đây là mùa lễ hội
-                    âm nhạc (Halloween, Giáng sinh, Đón năm mới), các nghệ sĩ và hãng đĩa đẩy mạnh tung ra các album và
-                    ca khúc trọng điểm.</p>
-                  <p style="margin-bottom:12px;">🌱 <strong style="color:var(--blue);">Quý I (Đầu năm):</strong> Có
-                    lượng phát hành khiêm tốn nhất với <strong style="color:#fff;">4,919 bài</strong> (-175 bài so với
-                    Q4), do thị trường nghỉ ngơi và lên kế hoạch sau đợt cao điểm.</p>
-                  <p>☀️ <strong style="color:var(--green);">Quý II & Quý III:</strong> Duy trì mức phát hành cân bằng
-                    (~5,000 bài/quý) phục vụ mùa hè và tour lưu diễn.</p>
+                  <p style="margin-bottom:12px;">🍂 <strong style="color:var(--pink);">Quarter IV (Year-End):</strong> Recorded the highest release volume with <strong style="color:#fff;">5,094 tracks</strong>. The holiday and festive season (Halloween, Christmas, New Year) drives aggressive album drops and priority single launches.</p>
+                  <p style="margin-bottom:12px;">🌱 <strong style="color:var(--blue);">Quarter I (Early Year):</strong> Experiences a modest volume of <strong style="color:#fff;">4,919 tracks</strong> (-175 tracks compared to Q4), as the industry resets and plans following the holiday peak.</p>
+                  <p>☀️ <strong style="color:var(--green);">Quarters II & III:</strong> Maintain steady equilibrium (~5,000 tracks/quarter) aligned with summer festivals, promotions, and concert tours.</p>
                 </div>
               </div>
             </div>
@@ -2082,9 +2074,9 @@
           <!-- Top Countries by Stream Bar Chart -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">🌍 Top Quốc gia có Lượt Stream cao nhất</div>
+              <div class="card-title">🌍 Top Countries by Stream Volume</div>
               <div class="controls-group">
-                <span class="control-label">Hiện:</span>
+                <span class="control-label">Show:</span>
                 <input class="input-styled" list="dl-ctop-n" id="stats-ctop-input" value="10" style="width:84px;"
                   onchange="renderCountryTopChart()" />
                 <datalist id="dl-ctop-n">
@@ -2101,38 +2093,37 @@
         <!-- ════════════════ TAB 7: MANAGE ════════════════ -->
         <section id="panel-manage" class="panel">
           <div class="view-header">
-            <h1 class="view-title">⚙️ Quản lý kho dữ liệu bài hát</h1>
-            <p class="view-desc">Thêm bài hát mới hoặc xóa bài hát – Hệ thống luôn hiển thị xác nhận trước khi thực thi
+            <h1 class="view-title">⚙️ Music Catalog Management</h1>
+            <p class="view-desc">Add new tracks or remove tracks – Confirmation dialog is required before execution
             </p>
           </div>
 
           <!-- ADD NEW SONG -->
           <div class="card">
-            <div class="card-title" style="margin-bottom:6px;">➕ Thêm bài hát mới vào hệ thống</div>
-            <p style="font-size:12px;color:var(--t3);margin-bottom:20px;">💡 Mã bài hát (Track ID) được hệ thống tự động
-              sinh. Các trường có dấu * là bắt buộc.</p>
+            <div class="card-title" style="margin-bottom:6px;">➕ Add New Track to System</div>
+            <p style="font-size:12px;color:var(--t3);margin-bottom:20px;">💡 Track IDs are automatically generated. Fields marked with * are required.</p>
 
             <div class="form-grid">
-              <div class="form-group"><label class="form-label">Tên bài hát *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Track Name *</label><input class="input-styled"
                   id="new-name" placeholder="Song title..." /></div>
-              <div class="form-group"><label class="form-label">Nghệ sĩ (Artist) *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Artist Name *</label><input class="input-styled"
                   id="new-artist" placeholder="Artist name..." /></div>
-              <div class="form-group"><label class="form-label">Thể loại (Genre) *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Genre *</label><input class="input-styled"
                   id="new-genre" placeholder="Pop, Rock, Hip-Hop..." /></div>
-              <div class="form-group"><label class="form-label">Hãng đĩa (Label) *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Record Label *</label><input class="input-styled"
                   id="new-label" placeholder="Columbia, Universal..." /></div>
-              <div class="form-group"><label class="form-label">Quốc gia (Country) *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Country *</label><input class="input-styled"
                   id="new-country" placeholder="United States, Vietnam..." /></div>
               <div class="form-group">
-                <label class="form-label">Độ ồn (Loudness) *</label>
+                <label class="form-label">Loudness Category *</label>
                 <select class="select-styled" id="new-loudness">
-                  <option value="">-- Chọn danh mục độ ồn --</option>
+                  <option value="">-- Select Loudness Level --</option>
                   <option value="Quiet">🔇 Quiet</option>
                   <option value="Moderate">🔉 Moderate</option>
                   <option value="Loud">🔊 Loud</option>
                 </select>
               </div>
-              <div class="form-group"><label class="form-label">Ngày phát hành *</label><input class="input-styled"
+              <div class="form-group"><label class="form-label">Release Date *</label><input class="input-styled"
                   type="date" id="new-date" /></div>
               <div class="form-group"><label class="form-label">Stream Count</label><input class="input-styled"
                   type="number" id="new-stream" placeholder="1000" min="0" /></div>
@@ -2143,8 +2134,8 @@
             </div>
 
             <div style="margin-top:22px;display:flex;gap:12px;">
-              <button class="btn btn-primary" onclick="initiateAddSong()">➕ Thêm bài hát</button>
-              <button class="btn btn-secondary" onclick="resetAddSongForm()">✕ Xóa form</button>
+              <button class="btn btn-primary" onclick="initiateAddSong()">➕ Add Track</button>
+              <button class="btn btn-secondary" onclick="resetAddSongForm()">✕ Reset Form</button>
             </div>
           </div>
 
@@ -2152,21 +2143,20 @@
 
           <!-- DELETE SONG -->
           <div class="card">
-            <div class="card-title" style="margin-bottom:6px;">🗑️ Xóa bài hát khỏi hệ thống</div>
-            <p style="font-size:12px;color:var(--t2);margin-bottom:18px;">Bạn có thể tra cứu theo Track ID hoặc Tên bài
-              hát để xem trước thông tin trước khi xác nhận xóa.</p>
+            <div class="card-title" style="margin-bottom:6px;">🗑️ Remove Track from System</div>
+            <p style="font-size:12px;color:var(--t2);margin-bottom:18px;">Look up by Track ID or Track Name to preview track details before confirming deletion.</p>
 
             <!-- Segmented Mode -->
             <div class="controls-group" style="margin-bottom:16px;">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                 <input type="radio" name="del-mode" value="id" checked onchange="toggleDelMode()"
                   style="accent-color:var(--red);width:16px;height:16px;" />
-                <span style="font-weight:600;font-size:13px;">🔖 Xóa theo Track ID</span>
+                <span style="font-weight:600;font-size:13px;">🔖 Delete by Track ID</span>
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:14px;">
                 <input type="radio" name="del-mode" value="song" onchange="toggleDelMode()"
                   style="accent-color:var(--red);width:16px;height:16px;" />
-                <span style="font-weight:600;font-size:13px;">🎵 Xóa theo Tên bài hát</span>
+                <span style="font-weight:600;font-size:13px;">🎵 Delete by Track Name</span>
               </label>
             </div>
 
@@ -2176,11 +2166,11 @@
                 <div class="search-input-box">
                   <div class="search-prefix-badge" style="background:var(--red);">TRK-</div>
                   <input type="text" class="search-input-field" id="del-id-input"
-                    placeholder="Nhập số ID (ví dụ: 00001)..." oninput="handleDelIdInput()" />
+                    placeholder="Enter ID number (e.g., 00001)..." oninput="handleDelIdInput()" />
                 </div>
                 <div class="suggest-dropdown" id="suggest-del-id"></div>
               </div>
-              <button class="btn btn-danger" onclick="initiateDeleteById()">🗑️ Xác nhận xóa</button>
+              <button class="btn btn-danger" onclick="initiateDeleteById()">🗑️ Confirm Delete</button>
             </div>
 
             <!-- Delete by Name -->
@@ -2189,7 +2179,7 @@
                 <div class="search-input-box">
                   <div class="search-prefix-badge" style="background:var(--red);">🎵</div>
                   <input type="text" class="search-input-field" id="del-song-input"
-                    placeholder="Gõ tên bài hát để tìm kiếm..." oninput="handleDelSongInput()" />
+                    placeholder="Type song title to search..." oninput="handleDelSongInput()" />
                 </div>
                 <div class="suggest-dropdown" id="suggest-del-song"></div>
               </div>
@@ -2208,11 +2198,11 @@
   <div class="modal-overlay" id="global-modal" style="display:none;">
     <div class="modal-window">
       <div class="modal-icon-badge" id="modal-icon-badge">⚠️</div>
-      <div class="modal-title-text" id="modal-title-text">Xác nhận thao tác</div>
-      <div class="modal-desc-text" id="modal-desc-text">Bạn có chắc chắn muốn thực hiện thao tác này không?</div>
+      <div class="modal-title-text" id="modal-title-text">Confirm Action</div>
+      <div class="modal-desc-text" id="modal-desc-text">Are you sure you want to perform this action?</div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="resolveModal(false)" id="modal-btn-cancel">Hủy bỏ</button>
-        <button class="btn btn-primary" onclick="resolveModal(true)" id="modal-btn-confirm">Xác nhận</button>
+        <button class="btn btn-secondary" onclick="resolveModal(false)" id="modal-btn-cancel">Cancel</button>
+        <button class="btn btn-primary" onclick="resolveModal(true)" id="modal-btn-confirm">Confirm</button>
       </div>
     </div>
   </div>
@@ -2222,8 +2212,8 @@
     onclick="if(event.target===this)closeDetailModal()">
     <div class="detail-popup-box">
       <div class="detail-popup-header">
-        <div style="font-size:16px;font-weight:700;" id="detail-modal-title">Danh sách bài hát</div>
-        <button class="btn btn-secondary" onclick="closeDetailModal()" style="padding:6px 14px;">✕ Đóng</button>
+        <div style="font-size:16px;font-weight:700;" id="detail-modal-title">Track Catalog</div>
+        <button class="btn btn-secondary" onclick="closeDetailModal()" style="padding:6px 14px;">✕ Close</button>
       </div>
       <div class="detail-popup-body" id="detail-modal-body"></div>
     </div>
@@ -2257,20 +2247,20 @@
     // Fun Facts Data for Overview Carousel
     const OVERVIEW_FACTS = [
       {
-        title: '📈 Phân tích Tăng trưởng Stream theo Năm',
-        desc: 'Lượt stream toàn cầu đạt đỉnh trong giai đoạn 2018–2021 nhờ sự bùng nổ của các thiết bị di động và mô hình thuê bao âm nhạc trực tuyến.'
+        title: '📈 Yearly Stream Growth Analysis',
+        desc: 'Global streams surged significantly during 2018–2021 driven by mobile adoption and music streaming subscriptions.'
       },
       {
-        title: '🎧 Thể loại Pop & Hip-Hop thống trị',
-        desc: 'Hơn 55% tổng lượt stream trong toàn bộ thư viện thuộc về Pop và Hip-Hop, khẳng định vị thế dẫn đầu xu hướng của giới trẻ.'
+        title: '🎧 Pop & Hip-Hop Dominance',
+        desc: 'Over 55% of all streaming volume in the library belongs to Pop and Hip-Hop, highlighting dominant youth trends.'
       },
       {
-        title: '🌍 Thị phần Quốc gia nổi bật',
-        desc: 'Hoa Kỳ và Vương quốc Anh đóng góp hơn 60% tổng lượt stream, nhưng các thị trường mới nổi như Brazil và Hàn Quốc đang tăng trưởng rất nhanh.'
+        title: '🌍 Key Global Market Shares',
+        desc: 'The United States and United Kingdom represent the largest share of streams, with emerging markets in Latin America and Asia accelerating.'
       },
       {
-        title: '💡 Chu kỳ Mùa vụ Cuối năm',
-        desc: 'Quý IV luôn ghi nhận số lượng phát hành ca khúc mới vượt trội (+94 bài so với mức trung bình) nhờ mùa lễ hội Giáng sinh và Năm mới.'
+        title: '💡 Year-End Seasonal Cycles',
+        desc: 'Quarter IV consistently records the highest volume of new track releases boosted by holiday and festive campaigns.'
       }
     ];
     let currentOverviewFactIndex = 0;
@@ -2315,13 +2305,13 @@
       return String.fromCodePoint(...[...code].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
     }
 
-    // ── FORMATTER STREAM CHUẨN: 300,000 / 20,000,000 (KHÔNG CÓ 300,000K) ──
+    // ── STANDARD STREAM FORMATTER: 300,000 / 20,000,000 ──
     function fmtStream(n) {
       if (n === null || n === undefined || isNaN(n)) return '—';
       return Number(n).toLocaleString('en-US');
     }
 
-    // Rút gọn chuẩn: 300K, 20M, 6K (không có dấu phẩy gắn K)
+    // Standard abbreviation: 300K, 20M, 6K
     function fmtStreamShort(n) {
       if (n === null || n === undefined || isNaN(n)) return '—';
       const v = Number(n);
@@ -2373,7 +2363,7 @@
 
     // ── MODAL PROMISE HELPER ──
     let modalResolveHandler = null;
-    function triggerModal(icon, title, desc, confirmText = 'Xác nhận', isDanger = false) {
+    function triggerModal(icon, title, desc, confirmText = 'Confirm', isDanger = false) {
       return new Promise(resolve => {
         modalResolveHandler = resolve;
         document.getElementById('modal-icon-badge').textContent = icon;
@@ -2447,7 +2437,7 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         allSongs = await res.json();
       } catch (err) {
-        showToast('Không kết nối được Flask API', 'error');
+        showToast('Could not connect to Flask API', 'error');
       }
     }
 
@@ -2498,7 +2488,7 @@
       currentRankingLevels = sortedLevels;
 
       if (!sortedLevels.length) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Không có dữ liệu</p></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No data available</p></div>';
         return;
       }
 
@@ -2520,7 +2510,7 @@
         xAxis: {
           categories: sortedLevels.map(l => {
             const badge = l.rank <= 3 ? medals[l.rank - 1] : `#${l.rank}`;
-            return `${badge} (${l.count} bài)`;
+            return `${badge} (${l.count} tracks)`;
           }),
           labels: {
             style: { color: '#a1a1aa', fontSize: '12px', fontWeight: '500' },
@@ -2530,7 +2520,7 @@
           tickColor: 'rgba(255,255,255,0.1)'
         },
         yAxis: {
-          title: { text: isStream ? 'Lượt Stream' : 'Điểm Popularity', style: { color: '#a1a1aa' } },
+          title: { text: isStream ? 'Streams' : 'Popularity Score', style: { color: '#a1a1aa' } },
           labels: {
             formatter: function () { return isStream ? fmtStreamShort(this.value) : this.value; },
             style: { color: '#a1a1aa' }
@@ -2543,10 +2533,10 @@
             if (!item) return false;
             const formattedVal = isStream ? fmtStream(item.value) : item.value;
             return `<div style="padding:4px;">
-          <b style="color:#1db954;">Mức hạng #${item.rank}</b><br/>
-          ${isStream ? '🎧 Lượt Stream:' : '⭐ Popularity:'} <b>${formattedVal}</b><br/>
-          🎵 Số bài đạt mức này: <b>${item.count} bài</b><br/>
-          <span style="color:#38bdf8;font-size:11px;">👉 Click để xem danh sách chi tiết</span>
+          <b style="color:#1db954;">Tier Rank #${item.rank}</b><br/>
+          ${isStream ? '🎧 Streams:' : '⭐ Popularity:'} <b>${formattedVal}</b><br/>
+          🎵 Track count in tier: <b>${item.count} tracks</b><br/>
+          <span style="color:#38bdf8;font-size:11px;">👉 Click to view detailed track list</span>
         </div>`;
           },
           useHTML: true,
@@ -2570,8 +2560,8 @@
                 click: function () {
                   const item = currentRankingLevels[this.index];
                   if (item) {
-                    const label = isStream ? `Lượt Stream: ${fmtStream(item.value)}` : `Popularity: ${item.value}`;
-                    openDetailModal(`Mức Hạng #${item.rank} (${label}) – Tổng ${item.count} bài hát`, item.tracks);
+                    const label = isStream ? `Streams: ${fmtStream(item.value)}` : `Popularity: ${item.value}`;
+                    openDetailModal(`Tier #${item.rank} (${label}) – Total ${item.count} tracks`, item.tracks);
                   }
                 }
               }
@@ -2579,7 +2569,7 @@
           }
         },
         series: [{
-          name: isStream ? 'Lượt Stream' : 'Popularity',
+          name: isStream ? 'Streams' : 'Popularity',
           data: sortedLevels.map(l => l.value)
         }],
         legend: { enabled: false },
@@ -2601,7 +2591,7 @@
         })).filter(d => d.year).sort((a, b) => +a.year - +b.year);
 
         if (!arr.length) {
-          container.innerHTML = '<div class="empty-state"><p>Không có dữ liệu</p></div>';
+          container.innerHTML = '<div class="empty-state"><p>No data available</p></div>';
           return;
         }
 
@@ -2614,7 +2604,7 @@
             lineColor: 'rgba(255,255,255,0.1)'
           },
           yAxis: {
-            title: { text: 'Tổng Stream Count', style: { color: '#a1a1aa' } },
+            title: { text: 'Total Stream Count', style: { color: '#a1a1aa' } },
             labels: {
               formatter: function () { return fmtStreamShort(this.value); },
               style: { color: '#a1a1aa' }
@@ -2622,7 +2612,7 @@
             gridLineColor: 'rgba(255,255,255,0.06)'
           },
           tooltip: {
-            formatter: function () { return `<b>Năm ${this.x}</b><br/>🎧 Tổng stream: <b>${fmtStream(this.y)}</b>`; },
+            formatter: function () { return `<b>Year ${this.x}</b><br/>🎧 Total Streams: <b>${fmtStream(this.y)}</b>`; },
             backgroundColor: '#161622',
             borderColor: 'rgba(255,255,255,0.15)',
             style: { color: '#fff' }
@@ -2665,7 +2655,7 @@
         .map(([genre, data]) => ({
           name: genre,
           y: isStream ? data.stream : data.count,
-          valDisplay: isStream ? fmtStream(data.stream) : fmtCount(data.count) + ' bài'
+          valDisplay: isStream ? fmtStream(data.stream) : fmtCount(data.count) + ' tracks'
         }))
         .sort((a, b) => b.y - a.y)
         .slice(0, 8);
@@ -2678,7 +2668,7 @@
         title: { text: null },
         tooltip: {
           formatter: function () {
-            return `<b>🎸 ${this.point.name}</b><br/>${isStream ? 'Streams:' : 'Số bài:'} <b>${this.point.valDisplay}</b><br/>Tỷ lệ: <b>${this.percentage.toFixed(1)}%</b>`;
+            return `<b>🎸 ${this.point.name}</b><br/>${isStream ? 'Streams:' : 'Tracks:'} <b>${this.point.valDisplay}</b><br/>Share: <b>${this.percentage.toFixed(1)}%</b>`;
           },
           backgroundColor: '#161622',
           borderColor: 'rgba(255,255,255,0.15)',
@@ -2693,7 +2683,7 @@
             dataLabels: { enabled: false }
           }
         },
-        series: [{ name: isStream ? 'Stream' : 'Số bài', data: sortedGenres }],
+        series: [{ name: isStream ? 'Streams' : 'Tracks', data: sortedGenres }],
         credits: { enabled: false }
       });
 
@@ -2773,38 +2763,38 @@
 
     async function executeIdSearch() {
       const rawId = document.getElementById('search-id-input').value.trim();
-      if (!rawId) { showToast('Vui lòng nhập số ID bài hát', 'error'); return; }
+      if (!rawId) { showToast('Please enter a track ID number', 'error'); return; }
       const fullId = rawId.startsWith('TRK-') ? rawId : 'TRK-' + rawId;
       document.getElementById('suggest-id-dropdown').classList.remove('open');
       document.getElementById('recommendations-box').style.display = 'none';
 
       const resArea = document.getElementById('search-results-area');
-      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Đang tìm kiếm...</div>';
+      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Searching...</div>';
 
       try {
         const res = await fetchApi(`${API}/search?id=${encodeURIComponent(fullId)}`);
         const data = await res.json();
         renderSearchResults(data);
       } catch (err) {
-        showToast('Lỗi tìm kiếm: ' + err.message, 'error');
+        showToast('Search error: ' + err.message, 'error');
       }
     }
 
     async function executeSongSearch() {
       const songName = document.getElementById('search-song-input').value.trim();
-      if (!songName) { showToast('Vui lòng nhập tên bài hát', 'error'); return; }
+      if (!songName) { showToast('Please enter a song title', 'error'); return; }
       document.getElementById('suggest-song-dropdown').classList.remove('open');
       document.getElementById('recommendations-box').style.display = 'none';
 
       const resArea = document.getElementById('search-results-area');
-      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Đang tìm kiếm...</div>';
+      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Searching...</div>';
 
       try {
         const res = await fetchApi(`${API}/search?song=${encodeURIComponent(songName)}`);
         const data = await res.json();
         renderSearchResults(data);
       } catch (err) {
-        showToast('Lỗi tìm kiếm: ' + err.message, 'error');
+        showToast('Search error: ' + err.message, 'error');
       }
     }
 
@@ -2816,13 +2806,13 @@
       }
       const rows = Array.isArray(data) ? data : [data];
       if (!rows.length) {
-        area.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-state-icon">🔍</div><p>Không tìm thấy bài hát nào phù hợp</p></div></div>`;
+        area.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-state-icon">🔍</div><p>No matching tracks found</p></div></div>`;
         return;
       }
       area.innerHTML = `
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🎵 Kết quả tìm kiếm (${rows.length} bài hát)</div>
+        <div class="card-title">🎵 Search Results (${rows.length} tracks)</div>
       </div>
       <div class="table-responsive">${buildTableHtml(rows)}</div>
     </div>
@@ -2927,9 +2917,9 @@
 
       const badge = document.getElementById('artist-filtered-count');
       if (selectedGenre || selectedArtistLetter !== 'ALL') {
-        badge.textContent = `(${artists.length} nghệ sĩ phù hợp)`;
+        badge.textContent = `(${artists.length} matching artists)`;
       } else {
-        badge.textContent = `(${artists.length} nghệ sĩ)`;
+        badge.textContent = `(${artists.length} artists)`;
       }
 
       document.getElementById('dl-filter-artist').innerHTML = artists.map(a => `<option value="${escapeHtml(a)}"></option>`).join('');
@@ -2950,12 +2940,12 @@
       if (c) params.append('country', c);
 
       if (!params.toString()) {
-        showToast('Vui lòng chọn hoặc nhập ít nhất 1 tiêu chí', 'error');
+        showToast('Please select or enter at least one criterion', 'error');
         return;
       }
 
       const resArea = document.getElementById('filter-results-area');
-      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Đang lọc danh sách...</div>';
+      resArea.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Filtering tracks...</div>';
 
       try {
         const res = await fetchApi(`${API}/filter?${params}`);
@@ -2968,18 +2958,18 @@
         const rows = Array.isArray(data) ? data : [];
         const badge = document.getElementById('filter-results-badge');
         badge.style.display = 'inline-flex';
-        badge.textContent = `✅ Tìm thấy ${rows.length} bài hát`;
+        badge.textContent = `✅ Found ${rows.length} tracks`;
 
         resArea.innerHTML = `
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📋 Danh sách kết quả lọc (${rows.length} bài hát)</div>
+          <div class="card-title">📋 Filter Results (${rows.length} tracks)</div>
         </div>
         <div class="table-responsive">${buildTableHtml(rows)}</div>
       </div>
     `;
       } catch (err) {
-        showToast('Lỗi lọc dữ liệu: ' + err.message, 'error');
+        showToast('Filter error: ' + err.message, 'error');
       }
     }
 
@@ -3014,12 +3004,12 @@
         })).sort((a, b) => b.value - a.value);
 
         if (!arr.length) {
-          container.innerHTML = '<div class="empty-state"><p>Không có dữ liệu</p></div>';
+          container.innerHTML = '<div class="empty-state"><p>No data available</p></div>';
           return;
         }
 
         const isStream = (metric === 'stream');
-        const metricTitle = { track: 'Số lượng Bài hát', stream: 'Tổng Lượt Stream', artist: 'Số lượng Nghệ sĩ' }[metric];
+        const metricTitle = { track: 'Number of Tracks', stream: 'Total Streams', artist: 'Number of Artists' }[metric];
         const barColor = { track: '#1db954', stream: '#38bdf8', artist: '#8b5cf6' }[metric];
 
         Highcharts.chart('chart-label-bars', {
@@ -3086,35 +3076,35 @@
       const boxes = [
         {
           icon: '👑',
-          title: 'Hãng đĩa Thống lĩnh Thị trường',
-          desc: `<strong>${top1.label}</strong> dẫn đầu tuyệt đối ở vị trí số 1 với ${isStream ? fmtStream(top1.value) : top1.value.toLocaleString() + (isTrack ? ' bài hát' : ' nghệ sĩ')}. Hãng chiếm khoảng <strong style="color:var(--green);">${pct1}%</strong> thị phần trong tổng nhóm được khảo sát.`,
+          title: 'Market Dominant Label',
+          desc: `<strong>${top1.label}</strong> commands rank #1 with ${isStream ? fmtStream(top1.value) : top1.value.toLocaleString() + (isTrack ? ' tracks' : ' artists')}. The label accounts for approximately <strong style="color:var(--green);">${pct1}%</strong> market share among surveyed labels.`,
           stat: isStream ? fmtStreamShort(top1.value) : top1.value.toLocaleString(),
-          unit: isStream ? 'Streams' : isTrack ? 'bài hát' : 'nghệ sĩ'
+          unit: isStream ? 'Streams' : isTrack ? 'tracks' : 'artists'
         },
         {
           icon: '📊',
-          title: 'Cơ cấu & Mức độ Tập trung',
-          desc: `Nhóm Big 3 gồm [${[top1, top2, top3].filter(Boolean).map(d => d.label).join(', ')}] chiếm tới <strong style="color:var(--purple);">${top3pct}%</strong> toàn bộ lưu lượng. Điều này phản ánh rõ cấu trúc thị trường tập trung cao độ (Oligopoly), nơi các hãng lớn nắm giữ phần lớn catalog chất lượng.`,
+          title: 'Market Concentration & Structure',
+          desc: `The Big 3 labels [${[top1, top2, top3].filter(Boolean).map(d => d.label).join(', ')}] command <strong style="color:var(--purple);">${top3pct}%</strong> of total volume. This highlights an oligopolistic market structure where major players control top-tier catalog assets.`,
           stat: top3pct + '%',
-          unit: 'Thị phần Top 3'
+          unit: 'Top 3 Market Share'
         },
         {
           icon: isStream ? '💎' : '📈',
-          title: isStream ? 'Uy tín & Năng lực Thương mại' : 'Quy mô Catalog & Hút Nghệ sĩ',
+          title: isStream ? 'Commercial Impact & Prestige' : 'Catalog Scale & Roster Power',
           desc: isStream
-            ? `Lượt stream phản ánh trực tiếp sức hút thị trường và doanh thu. <strong>${top1.label}</strong> chứng minh uy tín vững chắc khi tạo ra lượng stream vượt trội so với các đối thủ cạnh tranh.`
+            ? `Streaming volume directly reflects commercial demand and revenue. <strong>${top1.label}</strong> demonstrates strong market authority with superior stream delivery.`
             : isTrack
-              ? `Số lượng bài hát lớn khẳng định kho nhạc đồ sộ của <strong>${top1.label}</strong>, tạo lợi thế đa dạng hóa thể loại và tiếp cận người nghe liên tục.`
-              : `Sở hữu số nghệ sĩ đông đảo nhất chứng tỏ sức hấp dẫn từ điều khoản hợp đồng và thương hiệu phát hành của <strong>${top1.label}</strong>.`,
+              ? `A massive track catalog confirms <strong>${top1.label}</strong>'s expansive music library, ensuring broad genre diversity and continuous reach.`
+              : `Managing the largest artist roster underscores <strong>${top1.label}</strong>'s attractiveness, talent recruitment, and publishing strength.`, 
           stat: arr.length + '',
-          unit: 'Hãng âm nhạc'
+          unit: 'Record Label'
         },
         {
           icon: '🎯',
-          title: 'Khuyến nghị & Chiến lược Dữ liệu',
-          desc: `Nên kết hợp đồng thời cả 3 chỉ số (Stream, Bài hát, Nghệ sĩ) để nhận diện hãng đĩa có "hiệu suất tinh hoa" (Stream cao trên số bài ít) thay vì chỉ nhìn vào số lượng đơn thuần. Hãng đứng cuối là <em>${arr[arr.length - 1]?.label || '—'}</em>.`,
+          title: 'Strategic Data Insights',
+          desc: `Synthesizing all three metrics (Streams, Tracks, Artists) reveals high-efficiency labels (high streams per track) rather than relying on raw volume alone. Lowest rank label: <em>${arr[arr.length - 1]?.label || '—'}</em>.`,
           stat: arr[arr.length - 1]?.label || '—',
-          unit: 'Vị trí cuối bảng'
+          unit: 'Lowest Rank'
         }
       ];
 
@@ -3181,9 +3171,9 @@
               return `
             <div style="padding:4px;">
               <b style="font-size:14px;">${getCountryFlag(p.name)} ${p.name}</b><br/>
-              🎧 Tổng Stream: <b>${fmtStream(p.stream_count)}</b><br/>
-              🎵 Số bài hát: <b>${(p.track_count || 0).toLocaleString()} bài</b><br/>
-              <span style="color:#1db954;font-size:11px;">👉 Click để xem danh sách bài hát</span>
+              🎧 Total Streams: <b>${fmtStream(p.stream_count)}</b><br/>
+              🎵 Total Tracks: <b>${(p.track_count || 0).toLocaleString()} tracks</b><br/>
+              <span style="color:#1db954;font-size:11px;">👉 Click to view track catalog</span>
             </div>
           `;
             },
@@ -3196,7 +3186,7 @@
             type: 'map',
             data: mapData,
             joinBy: 'hc-key',
-            name: isStream ? 'Lượt Stream' : 'Bài hát',
+            name: isStream ? 'Streams' : 'Tracks',
             states: { hover: { color: '#1ed760' } },
             point: {
               events: {
@@ -3209,7 +3199,7 @@
           credits: { enabled: false }
         });
       } catch (err) {
-        document.getElementById('world-map-container').innerHTML = `<div class="empty-state"><p>Không thể hiển thị bản đồ (${err.message})</p></div>`;
+        document.getElementById('world-map-container').innerHTML = `<div class="empty-state"><p>Unable to display map (${err.message})</p></div>`;
       }
     }
 
@@ -3226,21 +3216,21 @@
       const topEff = sortedByEff[0];
 
       document.getElementById('fact-top-stream-country').textContent = `🏆 ${topStream.country}`;
-      document.getElementById('fact-top-stream-desc').innerHTML = `Đứng đầu toàn cầu với tổng cộng <strong>${fmtStream(topStream.stream_count)} lượt stream</strong> và ${(topStream.track_count || 0).toLocaleString()} bài hát.`;
+      document.getElementById('fact-top-stream-desc').innerHTML = `Global leader with a total of <strong>${fmtStream(topStream.stream_count)} streams</strong> across ${(topStream.track_count || 0).toLocaleString()} tracks.`;
 
       document.getElementById('fact-efficiency-country').textContent = `⚡ ${topEff.country}`;
-      document.getElementById('fact-efficiency-desc').innerHTML = `Hiệu suất cao nhất thế giới: trung bình <strong>${fmtStream(Math.round(topEff.eff))} lượt stream/bài hát</strong>.`;
+      document.getElementById('fact-efficiency-desc').innerHTML = `Highest global efficiency: averaging <strong>${fmtStream(Math.round(topEff.eff))} streams/track</strong>.`;
 
-      document.getElementById('fact-coverage-desc').textContent = `Catalog phủ sóng tại ${countryStatsRaw.length} quốc gia và vùng lãnh thổ trên toàn thế giới.`;
+      document.getElementById('fact-coverage-desc').textContent = `Catalog distributed across ${countryStatsRaw.length} countries and territories worldwide.`;
     }
 
     async function openCountryTracksList(countryName, totalStream, totalTrack) {
       const panel = document.getElementById('country-tracks-panel');
       panel.style.display = 'block';
-      document.getElementById('country-panel-title').innerHTML = `${getCountryFlag(countryName)} Danh sách bài hát tại <strong>${escapeHtml(countryName)}</strong> (${(totalTrack || 0).toLocaleString()} bài · ${fmtStream(totalStream)} stream)`;
+      document.getElementById('country-panel-title').innerHTML = `${getCountryFlag(countryName)} Track Catalog in <strong>${escapeHtml(countryName)}</strong> (${(totalTrack || 0).toLocaleString()} tracks · ${fmtStream(totalStream)} streams)`;
 
       const tblContainer = document.getElementById('country-tracks-table');
-      tblContainer.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Đang tải danh sách bài hát...</div>';
+      tblContainer.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Loading track catalog...</div>';
 
       try {
         const res = await fetchApi(`${API}/filter?country=${encodeURIComponent(countryName)}`);
@@ -3287,7 +3277,7 @@
 
       const container = document.getElementById('quarter-cards-container');
       if (!data.length) {
-        container.innerHTML = '<div class="empty-state"><p>Không có dữ liệu cho quý này</p></div>';
+        container.innerHTML = '<div class="empty-state"><p>No data available for this quarter</p></div>';
         return;
       }
 
@@ -3300,7 +3290,7 @@
       <div class="q-card" style="border-color:${color};">
         <div class="q-card-name" style="color:${color};">${qStr}</div>
         <div class="q-card-val" style="color:${color};">${count.toLocaleString()}</div>
-        <div class="q-card-sub">bài hát phát hành</div>
+        <div class="q-card-sub">tracks released</div>
       </div>
     `;
       }).join('');
@@ -3327,7 +3317,7 @@
         },
         yAxis: {
           min: 4500,
-          title: { text: 'Số lượng bài hát', style: { color: '#a1a1aa' } },
+          title: { text: 'Number of Tracks', style: { color: '#a1a1aa' } },
           labels: { style: { color: '#a1a1aa' } },
           gridLineColor: 'rgba(255,255,255,0.06)',
           plotLines: [{
@@ -3335,14 +3325,14 @@
             color: 'rgba(255,255,255,0.3)',
             dashStyle: 'shortdash',
             width: 2,
-            label: { text: 'Mức chuẩn ~5,000 bài', style: { color: '#a1a1aa', fontSize: '11px' } }
+            label: { text: 'Baseline ~5,000 tracks', style: { color: '#a1a1aa', fontSize: '11px' } }
           }]
         },
         tooltip: {
           formatter: function () {
             const delta = this.y - 5000;
-            const deltaStr = delta >= 0 ? `+${delta} bài` : `${delta} bài`;
-            return `<b>${this.x}</b><br/>Tổng phát hành: <b>${this.y.toLocaleString()} bài</b><br/>Độ lệch so với mốc 5K: <b style="color:${delta >= 0 ? '#1db954' : '#ef4444'};">${deltaStr}</b>`;
+            const deltaStr = delta >= 0 ? `+${delta} tracks` : `${delta} tracks`;
+            return `<b>${this.x}</b><br/>Total Releases: <b>${this.y.toLocaleString()} tracks</b><br/>Baseline Variance (5K): <b style="color:${delta >= 0 ? '#1db954' : '#ef4444'};">${deltaStr}</b>`;
           },
           backgroundColor: '#161622',
           borderColor: 'rgba(255,255,255,0.15)',
@@ -3358,7 +3348,7 @@
             }
           }
         },
-        series: [{ name: 'Bài hát', data: chartData }],
+        series: [{ name: 'Tracks', data: chartData }],
         legend: { enabled: false },
         credits: { enabled: false }
       });
@@ -3376,7 +3366,7 @@
         }
         const arr = countryStatsRaw.slice(0, n);
         if (!arr.length) {
-          container.innerHTML = '<div class="empty-state"><p>Không có dữ liệu</p></div>';
+          container.innerHTML = '<div class="empty-state"><p>No data available</p></div>';
           return;
         }
 
@@ -3394,7 +3384,7 @@
             lineColor: 'rgba(255,255,255,0.1)'
           },
           yAxis: {
-            title: { text: 'Tổng Lượt Stream', style: { color: '#a1a1aa' } },
+            title: { text: 'Total Streams', style: { color: '#a1a1aa' } },
             labels: {
               formatter: function () { return fmtStreamShort(this.value); },
               style: { color: '#a1a1aa' }
@@ -3402,7 +3392,7 @@
             gridLineColor: 'rgba(255,255,255,0.06)'
           },
           tooltip: {
-            formatter: function () { return `<b>${this.x}</b><br/>🎧 Lượt Stream: <b>${fmtStream(this.y)}</b>`; },
+            formatter: function () { return `<b>${this.x}</b><br/>🎧 Streams: <b>${fmtStream(this.y)}</b>`; },
             backgroundColor: '#161622',
             borderColor: 'rgba(255,255,255,0.15)',
             style: { color: '#fff' }
@@ -3441,16 +3431,16 @@
       const date = document.getElementById('new-date').value;
 
       const missing = [];
-      if (!name) missing.push('Tên bài hát');
-      if (!artist) missing.push('Nghệ sĩ');
-      if (!genre) missing.push('Thể loại');
-      if (!label) missing.push('Hãng đĩa');
-      if (!country) missing.push('Quốc gia');
-      if (!loudness) missing.push('Độ ồn (Loudness)');
-      if (!date) missing.push('Ngày phát hành');
+      if (!name) missing.push('Track Name');
+      if (!artist) missing.push('Artist');
+      if (!genre) missing.push('Genre');
+      if (!label) missing.push('Record Label');
+      if (!country) missing.push('Country');
+      if (!loudness) missing.push('Loudness Category');
+      if (!date) missing.push('Release Date');
 
       if (missing.length) {
-        showToast('⚠️ Vui lòng điền đủ: ' + missing.join(', '), 'error');
+        showToast('⚠️ Please complete all required fields: ' + missing.join(', '), 'error');
         return;
       }
 
@@ -3468,12 +3458,12 @@
       };
 
       const confirmHtml = `
-    Thêm bài hát mới vào hệ thống:<br/>
+    Add new track to library:<br/>
     <strong style="color:var(--green);font-size:15px;">🎵 ${escapeHtml(name)}</strong><br/>
-    Bởi: <strong>${escapeHtml(artist)}</strong> · ${escapeHtml(genre)} (${escapeHtml(country)})
+    By: <strong>${escapeHtml(artist)}</strong> · ${escapeHtml(genre)} (${escapeHtml(country)})
   `;
 
-      const confirmed = await triggerModal('➕', 'Xác nhận Thêm Bài Hát', confirmHtml, 'Xác nhận thêm', false);
+      const confirmed = await triggerModal('➕', 'Confirm Add Track', confirmHtml, 'Confirm Add', false);
       if (!confirmed) return;
 
       try {
@@ -3487,14 +3477,14 @@
           showToast(result.error, 'error');
           return;
         }
-        showToast(result.message || 'Đã thêm bài hát thành công!', 'success');
+        showToast(result.message || 'Track added successfully!', 'success');
         resetAddSongForm();
         await fetchAllSummary();
         updateOverviewStatCards();
         renderRankingChart();
         renderGenreChart();
       } catch (err) {
-        showToast('Lỗi khi thêm bài hát: ' + err.message, 'error');
+        showToast('Error adding track: ' + err.message, 'error');
       }
     }
 
@@ -3534,14 +3524,20 @@
     }
 
     let delSongDebounce = null;
-    function handleDelSongInput() {
+    async function handleDelSongInput() {
       clearTimeout(delSongDebounce);
-      delSongDebounce = setTimeout(() => {
+      delSongDebounce = setTimeout(async () => {
         const query = document.getElementById('del-song-input').value.toLowerCase().trim();
         const dropdown = document.getElementById('suggest-del-song');
-        if (query.length < 2) { dropdown.classList.remove('open'); return; }
+        if (query.length < 1) { dropdown.classList.remove('open'); return; }
 
-        const matches = allSongs.filter(s => (s.track_name || '').toLowerCase().includes(query)).slice(0, 6);
+        let matches = (allSongs || []).filter(s => (s.track_name || '').toLowerCase().includes(query)).slice(0, 8);
+        if (!matches.length) {
+          try {
+            const res = await fetchApi(`${API}/suggest?q=${encodeURIComponent(query)}&limit=8`);
+            if (res.ok) matches = await res.json();
+          } catch (e) {}
+        }
         if (!matches.length) { dropdown.classList.remove('open'); return; }
 
         dropdown.innerHTML = matches.map(s => `
@@ -3551,7 +3547,7 @@
       </div>
     `).join('');
         dropdown.classList.add('open');
-      }, 180);
+      }, 150);
     }
 
     function previewTrackForDelete(trackId) {
@@ -3567,14 +3563,14 @@
         <div class="tpc-main">🎵 ${escapeHtml(track.track_name)}</div>
         <div class="tpc-sub">${escapeHtml(track.artist_name)} · <strong>${track.track_id}</strong> · ${escapeHtml(track.genre || '')}</div>
       </div>
-      <button class="btn btn-danger" onclick="executeDelete('${track.track_id}', '${escapeHtml(track.track_name)}')">🗑️ Xóa bài này</button>
+      <button class="btn btn-danger" onclick="executeDelete('${track.track_id}', '${escapeHtml(track.track_name)}')">🗑️ Delete this track</button>
     </div>
   `;
     }
 
     async function initiateDeleteById() {
       const rawId = document.getElementById('del-id-input').value.trim();
-      if (!rawId) { showToast('Vui lòng nhập ID bài hát cần xóa', 'error'); return; }
+      if (!rawId) { showToast('Please enter track ID to delete', 'error'); return; }
       const fullId = rawId.startsWith('TRK-') ? rawId : 'TRK-' + rawId;
       const track = allSongs.find(s => s.track_id?.toLowerCase() === fullId.toLowerCase());
       const trackName = track ? track.track_name : fullId;
@@ -3584,13 +3580,13 @@
 
     async function executeDelete(trackId, trackName) {
       const confirmHtml = `
-    Bạn có chắc chắn muốn xóa bài hát:<br/>
+    Are you sure you want to delete track:<br/>
     <strong style="color:var(--red);font-size:15px;">🗑️ ${escapeHtml(trackName)}</strong><br/>
-    Mã: <strong>${trackId}</strong><br/>
-    <span style="color:var(--t3);font-size:11px;">⚠️ Thao tác này KHÔNG thể hoàn tác!</span>
+    ID: <strong>${trackId}</strong><br/>
+    <span style="color:var(--t3);font-size:11px;">⚠️ This action CANNOT be undone!</span>
   `;
 
-      const confirmed = await triggerModal('🗑️', 'Xác nhận Xóa Bài Hát', confirmHtml, 'Xóa vĩnh viễn', true);
+      const confirmed = await triggerModal('🗑️', 'Confirm Track Deletion', confirmHtml, 'Delete Permanently', true);
       if (!confirmed) return;
 
       try {
@@ -3600,7 +3596,7 @@
           showToast(result.error, 'error');
           return;
         }
-        showToast(result.message || 'Đã xóa bài hát thành công!', 'success');
+        showToast(result.message || 'Track deleted successfully!', 'success');
         document.getElementById('del-id-input').value = '';
         document.getElementById('del-song-input').value = '';
         document.getElementById('del-preview-area').style.display = 'none';
@@ -3609,14 +3605,14 @@
         renderRankingChart();
         renderGenreChart();
       } catch (err) {
-        showToast('Lỗi khi xóa bài hát: ' + err.message, 'error');
+        showToast('Error deleting track: ' + err.message, 'error');
       }
     }
 
     // ── UTILITY: BUILD TABLE HTML ──
     function buildTableHtml(rows) {
       if (!rows || !rows.length) {
-        return '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Không có dữ liệu bài hát</p></div>';
+        return '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No track data available</p></div>';
       }
       const cols = ['track_id', 'track_name', 'artist_name', 'genre', 'label', 'country', 'release_date', 'stream_count', 'popularity'];
       return `
@@ -3624,13 +3620,13 @@
       <thead>
         <tr>
           <th>Track ID</th>
-          <th>Tên bài hát</th>
-          <th>Nghệ sĩ</th>
-          <th>Thể loại</th>
-          <th>Hãng đĩa</th>
-          <th>Quốc gia</th>
-          <th>Ngày phát hành</th>
-          <th>Lượt Stream</th>
+          <th>Track Name</th>
+          <th>Artist</th>
+          <th>Genre</th>
+          <th>Record Label</th>
+          <th>Country</th>
+          <th>Release Date</th>
+          <th>Streams</th>
           <th>Popularity</th>
         </tr>
       </thead>

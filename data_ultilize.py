@@ -2,7 +2,7 @@ import pandas as pd
 df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
 
 
-# Count số bài hát của label
+# Count number of tracks per record label
 def label_track_count(df: pd.DataFrame, top: int = None):
     labelcounttrack = (df.groupby('label')['track_id']
             .nunique()
@@ -20,7 +20,7 @@ def label_track_count(df: pd.DataFrame, top: int = None):
 
 
 
-# Streamcount của các bài hát thuộc label
+# Total stream count of tracks by record label
 def label_stream_count(top: int = None, df: pd.DataFrame = None):
     labelstreamcount = (df.groupby('label')['stream_count']
             .sum()
@@ -36,7 +36,7 @@ def label_stream_count(top: int = None, df: pd.DataFrame = None):
 
 
 
-# Số nghệ sĩ chọn label đó => đánh giá độ uy tín
+# Count number of unique artists per record label (measure label prestige)
 def label_artist(top: int = None, df: pd.DataFrame = None):
     artistcount = (df.groupby('label')['artist_name']
             .nunique()
