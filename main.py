@@ -43,7 +43,8 @@ from data_handle import (create_new_track,
 
 from data_ultilize import (label_stream_count,
                     label_artist,
-                    label_track_count
+                    label_track_count,
+                    country_details
                     )
 
 # Helper function to serialize DataFrame rows safely for JSON
@@ -206,6 +207,7 @@ def add():
         return jsonify({'error': str(e)}), 500
     
     df = pd.concat([df, pd.DataFrame([new_song])], ignore_index = True)
+    df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
     return jsonify({'message': 'Track added successfully', 'track': new_song}), 201
 
 
@@ -231,6 +233,7 @@ def remove():
             return jsonify(remove_song), status_code
 
         df = remove_song
+        df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
         return jsonify({'message': 'Track deleted successfully'}), 200
 
     except Exception as e:
@@ -395,12 +398,30 @@ def label_third():
 
 
 
-# Country statistics: track count and total stream count
+# Country statistics: track count and total stream count (for Heat Map & Global Shares)
 @app.route('/api/countrystats')
 def country_data():
     try:
         result = country_stats(df)
         return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# Country detailed statistics: overview, top genres, artists, albums, and release years stats
+@app.route('/api/countrydetails')
+def country_details_api():
+    try:
+        country = request.args.get('country', default = '', type = str)
+        top = request.args.get('top', default = 5, type = int)
+        years = request.args.get('years', type = str) or request.args.get('year', type = str)
+
+        result = country_details(df, country = country, top = top, years = years)
+        if isinstance(result, dict) and 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(result), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

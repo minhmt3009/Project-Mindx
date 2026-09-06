@@ -12,8 +12,8 @@ def new_trackid(df: pd.DataFrame):
     
     return f"TRK-{next_number:05d}" 
 
-default_values = {'album_name':'', 'duration_ms': 0, 'popularity': 50, 'stream_count':1000 }
-required_values = ['track_name', 'artist_name', 'genre', 'country', 'label', 'loudness_category', 'release_date']
+default_values = {'album_name':'', 'duration_ms': 0, 'popularity': 50, 'stream_count':1000, 'label': 'Independent', 'loudness_category': 'Moderate', 'genre': 'Unknown', 'country':'Unknown'}
+required_values = ['track_name', 'artist_name', 'release_date']
 
 
 # Format and parse date
@@ -42,19 +42,26 @@ def create_new_track (data: dict, df: pd.DataFrame) -> dict:
     release_date = parse_new_date(data)
 
     new_track_song = {
+        **default_values,
         'track_id': new_id,
         'track_name': data.get('track_name'),
         'artist_name': data.get('artist_name'),
-        'country': data.get('country') or '',
-        'label': data.get('label') or 'Independent',
-        'genre': data.get('genre') or 'Unknown',
-        'loudness_category': data.get('loudness_category') or 'Moderate',
         'release_date': release_date.strftime('%Y-%m-%d'),
         'release_year': release_date.year,
         'release_month': release_date.month,
         'release_day_of_week': release_date.day_name(),
-        **default_values
     }
+
+    # Override defaults with any provided non-empty fields from data
+    for k in default_values:
+        if k in data and data[k] is not None and str(data[k]).strip() != '':
+            if k in ('stream_count', 'popularity', 'duration_ms'):
+                try:
+                    new_track_song[k] = int(data[k])
+                except (ValueError, TypeError):
+                    new_track_song[k] = default_values[k]
+            else:
+                new_track_song[k] = data[k]
 
     return new_track_song
 
@@ -235,7 +242,7 @@ def month_track_count(df: pd.DataFrame):
 
 
 
-# Statistics for stream count and track count by country
+# Statistics by country
 def country_stats(df: pd.DataFrame):
     stats = (df.groupby('country')
         .agg(

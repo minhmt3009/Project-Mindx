@@ -1537,6 +1537,179 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.22);
     }
+
+    /* ── COUNTRY ANALYTICS & PAGINATION STYLES ── */
+    .country-analytics-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+    }
+
+    .country-subcard {
+      background: var(--card-solid);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .country-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin: 20px 0 24px;
+    }
+
+    .country-kpi-card {
+      background: var(--card-solid);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .country-kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--green);
+    }
+
+    .country-kpi-icon {
+      font-size: 26px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(29, 185, 84, 0.12);
+      border: 1px solid rgba(29, 185, 84, 0.25);
+    }
+
+    .country-kpi-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--t1);
+      letter-spacing: -0.5px;
+    }
+
+    .country-kpi-lbl {
+      font-size: 11px;
+      color: var(--t2);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .year-pills-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .year-pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--t2);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .year-pill-btn:hover {
+      background: rgba(29, 185, 84, 0.15);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .year-pill-btn.active {
+      background: linear-gradient(135deg, var(--green), #169b43);
+      color: #fff;
+      border-color: var(--green-hover);
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+
+    .country-charts-triplet {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .catalog-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pagination-info {
+      font-size: 13px;
+      color: var(--t2);
+      font-weight: 500;
+    }
+
+    .pagination-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-btn {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--t1);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: rgba(29, 185, 84, 0.2);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .page-btn.active {
+      background: var(--green);
+      border-color: var(--green-hover);
+      color: #000;
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -1600,10 +1773,6 @@
         <button class="sidebar-btn" onclick="switchTab('country')" id="tab-country">
           <span class="tab-icon">🌍</span>
           <span>Country Map</span>
-        </button>
-        <button class="sidebar-btn" onclick="switchTab('stats')" id="tab-stats">
-          <span class="tab-icon">📈</span>
-          <span>Quarterly Stats</span>
         </button>
         <button class="sidebar-btn" onclick="switchTab('manage')" id="tab-manage">
           <span class="tab-icon">⚙️</span>
@@ -1770,6 +1939,47 @@
               </div>
               <div id="chart-genre-pie" style="min-height:220px;"></div>
               <div id="genre-legend-container" style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+              </div>
+            </div>
+          </div>
+
+          <!-- QUARTERLY SEASONALITY & RELEASE TRENDS (MERGED INTO OVERVIEW) -->
+          <div class="card" style="margin-top:24px;">
+            <div class="card-header">
+              <div class="card-title">📅 Quarterly Seasonality & Release Trends</div>
+              <div class="controls-group">
+                <span class="control-label">Filter Quarter:</span>
+                <select class="select-styled" id="quarter-filter-select" onchange="renderQuarterView()">
+                  <option value="all">📋 All Quarters</option>
+                  <option value="1">Quarter I (Jan–Mar)</option>
+                  <option value="2">Quarter II (Apr–Jun)</option>
+                  <option value="3">Quarter III (Jul–Sep)</option>
+                  <option value="4">Quarter IV (Oct–Dec)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Quarter Cards Row -->
+            <div class="quarter-cards-row" id="quarter-cards-container">
+              <div class="loader-box">
+                <div class="spin-ring"></div>
+              </div>
+            </div>
+
+            <!-- Quarter Comparison Deviation Chart -->
+            <div class="grid-2" style="margin-top:10px;">
+              <div>
+                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">📊 Number of Tracks by Quarter</div>
+                <div id="chart-quarter-column" style="min-height:280px;"></div>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">💡 Seasonal Trend Analysis (Seasonality)</div>
+                <div
+                  style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;line-height:1.7;font-size:13px;color:var(--t2);">
+                  <p style="margin-bottom:12px;">🍂 <strong style="color:var(--pink);">Quarter IV (Year-End):</strong> Recorded the highest release volume with <strong style="color:#fff;">5,094 tracks</strong>. The holiday and festive season (Halloween, Christmas, New Year) drives aggressive album drops and priority single launches.</p>
+                  <p style="margin-bottom:12px;">🌱 <strong style="color:var(--blue);">Quarter I (Early Year):</strong> Experiences a modest volume of <strong style="color:#fff;">4,919 tracks</strong> (-175 tracks compared to Q4), as the industry resets and plans following the holiday peak.</p>
+                  <p>☀️ <strong style="color:var(--green);">Quarters II & III:</strong> Maintain steady equilibrium (~5,000 tracks/quarter) aligned with summer festivals, promotions, and concert tours.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -2011,75 +2221,16 @@
             </div>
           </div>
 
-          <!-- COUNTRY TRACKS MODAL PANEL -->
-          <div id="country-tracks-panel" style="display:none;margin-top:24px;">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title" id="country-panel-title">📋 Track Catalog</div>
-                <button class="btn btn-secondary" onclick="closeCountryPanel()">✕ Close List</button>
-              </div>
-              <div id="country-tracks-table" class="table-responsive"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ════════════════ TAB 6: STATISTICS ════════════════ -->
-        <section id="panel-stats" class="panel">
-          <div class="view-header">
-            <h1 class="view-title">📈 Quarterly Release Statistics & Country Shares</h1>
-            <p class="view-desc">Seasonal release cycles and country market rankings</p>
-          </div>
-
-          <div class="card">
+          <!-- DEFAULT VIEW WHEN NO COUNTRY IS SELECTED: TOP COUNTRIES BY STREAM BAR CHART -->
+          <div class="card" id="country-default-rankings-card" style="margin-top:24px;">
             <div class="card-header">
-              <div class="card-title">📅 Quarterly Seasonality & Release Trends</div>
-              <div class="controls-group">
-                <span class="control-label">Filter Quarter:</span>
-                <select class="select-styled" id="quarter-filter-select" onchange="renderQuarterView()">
-                  <option value="all">📋 All Quarters</option>
-                  <option value="1">Quarter I (Jan–Mar)</option>
-                  <option value="2">Quarter II (Apr–Jun)</option>
-                  <option value="3">Quarter III (Jul–Sep)</option>
-                  <option value="4">Quarter IV (Oct–Dec)</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Quarter Cards Row -->
-            <div class="quarter-cards-row" id="quarter-cards-container">
-              <div class="loader-box">
-                <div class="spin-ring"></div>
-              </div>
-            </div>
-
-            <!-- Quarter Comparison Deviation Chart -->
-            <div class="grid-2" style="margin-top:10px;">
-              <div>
-                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">📊 Number of Tracks by Quarter</div>
-                <div id="chart-quarter-column" style="min-height:280px;"></div>
-              </div>
-              <div>
-                <div style="font-size:14px;font-weight:700;margin-bottom:14px;">💡 Seasonal Trend Analysis
-                  (Seasonality)</div>
-                <div
-                  style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;line-height:1.7;font-size:13px;color:var(--t2);">
-                  <p style="margin-bottom:12px;">🍂 <strong style="color:var(--pink);">Quarter IV (Year-End):</strong> Recorded the highest release volume with <strong style="color:#fff;">5,094 tracks</strong>. The holiday and festive season (Halloween, Christmas, New Year) drives aggressive album drops and priority single launches.</p>
-                  <p style="margin-bottom:12px;">🌱 <strong style="color:var(--blue);">Quarter I (Early Year):</strong> Experiences a modest volume of <strong style="color:#fff;">4,919 tracks</strong> (-175 tracks compared to Q4), as the industry resets and plans following the holiday peak.</p>
-                  <p>☀️ <strong style="color:var(--green);">Quarters II & III:</strong> Maintain steady equilibrium (~5,000 tracks/quarter) aligned with summer festivals, promotions, and concert tours.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Top Countries by Stream Bar Chart -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🌍 Top Countries by Stream Volume</div>
+              <div class="card-title">🌍 Global Market Rankings: Top Countries by Stream Volume</div>
               <div class="controls-group">
                 <span class="control-label">Show:</span>
                 <input class="input-styled" list="dl-ctop-n" id="stats-ctop-input" value="10" style="width:84px;"
                   onchange="renderCountryTopChart()" />
                 <datalist id="dl-ctop-n">
+                  <option value="5"></option>
                   <option value="10"></option>
                   <option value="15"></option>
                   <option value="20"></option>
@@ -2088,7 +2239,127 @@
             </div>
             <div id="chart-country-top" style="min-height:360px;"></div>
           </div>
+
+          <!-- COUNTRY ANALYTICS & TRACK EXPLORER PANEL -->
+          <div id="country-tracks-panel" style="display:none;margin-top:24px;">
+            <div class="card country-analytics-container">
+              <!-- Panel Header -->
+              <div class="card-header" style="border-bottom: 1px solid var(--border); padding-bottom: 16px;">
+                <div>
+                  <div class="card-title" id="country-panel-title" style="font-size: 20px;">📋 Country Analytics</div>
+                  <p class="view-desc" style="margin-top: 4px; font-size: 13px;" id="country-panel-subtitle">Comprehensive market intelligence, historical trends, and track catalog</p>
+                </div>
+                <button class="btn btn-secondary" onclick="closeCountryPanel()">✕ Close Analytics</button>
+              </div>
+
+              <!-- 1. Overview KPIs -->
+              <div class="country-kpis" id="country-kpi-container">
+                <div class="country-kpi-card">
+                  <div class="country-kpi-icon">🎵</div>
+                  <div>
+                    <div class="country-kpi-val" id="ckpi-tracks">—</div>
+                    <div class="country-kpi-lbl">Total Tracks</div>
+                  </div>
+                </div>
+                <div class="country-kpi-card">
+                  <div class="country-kpi-icon">🎧</div>
+                  <div>
+                    <div class="country-kpi-val" id="ckpi-streams" style="color:var(--green);">—</div>
+                    <div class="country-kpi-lbl">Total Streams</div>
+                  </div>
+                </div>
+                <div class="country-kpi-card">
+                  <div class="country-kpi-icon">⭐</div>
+                  <div>
+                    <div class="country-kpi-val" id="ckpi-pop" style="color:var(--orange);">—</div>
+                    <div class="country-kpi-lbl">Avg Popularity</div>
+                  </div>
+                </div>
+                <div class="country-kpi-card">
+                  <div class="country-kpi-icon">📊</div>
+                  <div>
+                    <div class="country-kpi-val" id="ckpi-eff" style="color:var(--blue);">—</div>
+                    <div class="country-kpi-lbl">Stream / Track</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Year of Release Combo Chart (Bar + Line) with Year Selectors -->
+              <div class="country-subcard" style="margin-bottom: 24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+                  <div>
+                    <h3 style="font-size:16px; font-weight:700; color:var(--t1);">📅 Release Year Trend: Track Count & Stream Volume</h3>
+                    <p style="font-size:12px; color:var(--t2);">Combo Chart: Track count (Bars, left axis) vs Total Streams (Line, right axis)</p>
+                  </div>
+                  <div style="font-size:12px; color:var(--t2);">
+                    Click year pills to filter or combine multiple years:
+                  </div>
+                </div>
+                
+                <!-- Year Pill Buttons -->
+                <div class="year-pills-bar" id="country-year-pills">
+                  <!-- Generated dynamically based on available_years -->
+                </div>
+
+                <!-- Combo Chart Container -->
+                <div id="country-chart-year-combo" style="height: 340px; width: 100%;"></div>
+              </div>
+
+              <!-- 3. Triplet Category Distribution Charts (Genre, Artist, Albums) -->
+              <div class="country-charts-triplet">
+                <!-- Genre Donut Chart -->
+                <div class="country-subcard">
+                  <h4 style="font-size:14px; font-weight:700; margin-bottom:4px; color:var(--t1);">🎸 Top Genres</h4>
+                  <p style="font-size:11px; color:var(--t2); margin-bottom:12px;">Share of catalog tracks by genre</p>
+                  <div id="country-chart-genre" style="height: 280px; width: 100%;"></div>
+                </div>
+
+                <!-- Top Artists Bar Chart -->
+                <div class="country-subcard">
+                  <h4 style="font-size:14px; font-weight:700; margin-bottom:4px; color:var(--t1);">🎤 Top Artists</h4>
+                  <p style="font-size:11px; color:var(--t2); margin-bottom:12px;">Leading artists by track count & stream</p>
+                  <div id="country-chart-artist" style="height: 280px; width: 100%;"></div>
+                </div>
+
+                <!-- Top Albums Column Chart -->
+                <div class="country-subcard">
+                  <h4 style="font-size:14px; font-weight:700; margin-bottom:4px; color:var(--t1);">💿 Top Albums</h4>
+                  <p style="font-size:11px; color:var(--t2); margin-bottom:12px;">Most featured albums in this market</p>
+                  <div id="country-chart-album" style="height: 280px; width: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- 4. Track Catalog with Pagination (Rút gọn vài bài, chuyển trang) -->
+              <div class="country-subcard" style="padding:0; overflow:hidden;">
+                <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                  <div>
+                    <h3 style="font-size:16px; font-weight:700; color:var(--t1);">📜 Track Catalog (Paginated)</h3>
+                    <p style="font-size:12px; color:var(--t2);">Concise track preview with fast interactive page navigation</p>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <label style="font-size:12px; color:var(--t2);">Items per page:</label>
+                    <select class="select-styled" id="country-pagesize-select" onchange="changeCountryPageSize(this.value)" style="padding:4px 10px; font-size:12px;">
+                      <option value="6" selected>6 tracks</option>
+                      <option value="10">10 tracks</option>
+                      <option value="15">15 tracks</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Table Container -->
+                <div id="country-tracks-table" class="table-responsive"></div>
+
+                <!-- Pagination Footer -->
+                <div class="catalog-pagination" id="country-pagination-bar">
+                  <div class="pagination-info" id="country-pagination-info">Showing 0 - 0 of 0 tracks</div>
+                  <div class="pagination-btns" id="country-pagination-btns"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
+
 
         <!-- ════════════════ TAB 7: MANAGE ════════════════ -->
         <section id="panel-manage" class="panel">
@@ -2101,36 +2372,43 @@
           <!-- ADD NEW SONG -->
           <div class="card">
             <div class="card-title" style="margin-bottom:6px;">➕ Add New Track to System</div>
-            <p style="font-size:12px;color:var(--t3);margin-bottom:20px;">💡 Track IDs are automatically generated. Fields marked with * are required.</p>
+            <p style="font-size:12px;color:var(--t3);margin-bottom:20px;">💡 Track IDs are automatically generated. Only <strong>Track Name</strong>, <strong>Artist</strong>, and <strong>Release Date</strong> are required. Other fields will use smart defaults if left empty.</p>
 
             <div class="form-grid">
               <div class="form-group"><label class="form-label">Track Name *</label><input class="input-styled"
                   id="new-name" placeholder="Song title..." /></div>
               <div class="form-group"><label class="form-label">Artist Name *</label><input class="input-styled"
                   id="new-artist" placeholder="Artist name..." /></div>
-              <div class="form-group"><label class="form-label">Genre *</label><input class="input-styled"
-                  id="new-genre" placeholder="Pop, Rock, Hip-Hop..." /></div>
-              <div class="form-group"><label class="form-label">Record Label *</label><input class="input-styled"
-                  id="new-label" placeholder="Columbia, Universal..." /></div>
-              <div class="form-group"><label class="form-label">Country *</label><input class="input-styled"
-                  id="new-country" placeholder="United States, Vietnam..." /></div>
+              <div class="form-group"><label class="form-label">Release Date *</label><input class="input-styled"
+                  type="date" id="new-date" /></div>
+              <div class="form-group"><label class="form-label">Genre</label><input class="input-styled"
+                  id="new-genre" placeholder="e.g., Pop, Rock (Default: Unknown)" /></div>
+              <div class="form-group"><label class="form-label">Record Label</label><input class="input-styled"
+                  id="new-label" placeholder="e.g., Columbia (Default: Independent)" /></div>
+              <div class="form-group"><label class="form-label">Country</label><input class="input-styled"
+                  id="new-country" placeholder="e.g., United States (Default: Unknown)" /></div>
+              <div class="form-group"><label class="form-label">Album Name</label><input class="input-styled"
+                  id="new-album" placeholder="Album title (Optional)" /></div>
               <div class="form-group">
-                <label class="form-label">Loudness Category *</label>
+                <label class="form-label">Loudness Category</label>
                 <select class="select-styled" id="new-loudness">
-                  <option value="">-- Select Loudness Level --</option>
+                  <option value="Moderate" selected>🔉 Moderate (Default)</option>
                   <option value="Quiet">🔇 Quiet</option>
-                  <option value="Moderate">🔉 Moderate</option>
                   <option value="Loud">🔊 Loud</option>
                 </select>
               </div>
-              <div class="form-group"><label class="form-label">Release Date *</label><input class="input-styled"
-                  type="date" id="new-date" /></div>
               <div class="form-group"><label class="form-label">Stream Count</label><input class="input-styled"
-                  type="number" id="new-stream" placeholder="1000" min="0" /></div>
+                  type="number" id="new-stream" placeholder="1000 (Default)" min="0" /></div>
               <div class="form-group"><label class="form-label">Popularity (0–100)</label><input class="input-styled"
-                  type="number" id="new-pop" placeholder="50" min="0" max="100" /></div>
-              <div class="form-group"><label class="form-label">Duration (ms)</label><input class="input-styled"
-                  type="number" id="new-duration" placeholder="240000" min="0" /></div>
+                  type="number" id="new-pop" placeholder="50 (Default)" min="0" max="100" /></div>
+              <div class="form-group">
+                <label class="form-label">Duration (Min : Sec)</label>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <input class="input-styled" type="number" id="new-dur-min" placeholder="0 min" min="0" max="60" style="flex:1;" />
+                  <span style="color:var(--t3);font-weight:700;">:</span>
+                  <input class="input-styled" type="number" id="new-dur-sec" placeholder="00 sec" min="0" max="59" style="flex:1;" />
+                </div>
+              </div>
             </div>
 
             <div style="margin-top:22px;display:flex;gap:12px;">
@@ -2335,6 +2613,16 @@
       return Number(n).toLocaleString('en-US');
     }
 
+    // ── DURATION FORMATTER: ms -> mm:ss (e.g. 215000 -> 3:35) ──
+    function formatDuration(ms) {
+      const num = Number(ms);
+      if (!num || isNaN(num) || num <= 0) return '0:00';
+      const totalSeconds = Math.floor(num / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
     // ── OVERVIEW FUN FACT NAVIGATION ──
     function updateOverviewFact() {
       const fact = OVERVIEW_FACTS[currentOverviewFactIndex];
@@ -2403,6 +2691,7 @@
       renderRankingChart();
       renderStreamTimelineChart();
       renderGenreChart();
+      fetchAndRenderQuarterStats();
       tabLoadedState.overview = true;
 
       // Background non-blocking pre-warm
@@ -2422,11 +2711,12 @@
       // Lazy load each tab on first visit
       if (!tabLoadedState[tabId]) {
         tabLoadedState[tabId] = true;
+        if (tabId === 'overview') fetchAndRenderQuarterStats();
         if (tabId === 'label') renderLabelChart();
-        if (tabId === 'country') initWorldMap();
-        if (tabId === 'stats') { fetchAndRenderQuarterStats(); renderCountryTopChart(); }
-      } else if (tabId === 'country' && worldMapInstance) {
-        setTimeout(() => { worldMapInstance.reflow(); }, 100);
+        if (tabId === 'country') { initWorldMap(); renderCountryTopChart(); }
+      } else if (tabId === 'country') {
+        if (worldMapInstance) setTimeout(() => { worldMapInstance.reflow(); }, 100);
+        renderCountryTopChart();
       }
     }
 
@@ -2837,6 +3127,7 @@
       <div class="rec-artist">${escapeHtml(s.artist_name || '—')}</div>
       <div class="rec-tags">
         <span class="rec-tag highlight">${escapeHtml(s.genre || 'Music')}</span>
+        <span class="rec-tag">⏱️ ${formatDuration(s.duration_ms)}</span>
         <span class="rec-tag">${fmtStreamShort(s.stream_count)}</span>
         <span class="rec-tag">⭐ ${s.popularity || 0}</span>
       </div>
@@ -3129,6 +3420,7 @@
         countryStatsRaw = await res.json();
         redrawMap();
         updateCountryFunFacts();
+        renderCountryTopChart();
       } catch (err) {
         document.getElementById('world-map-container').innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`;
       }
@@ -3224,32 +3516,473 @@
       document.getElementById('fact-coverage-desc').textContent = `Catalog distributed across ${countryStatsRaw.length} countries and territories worldwide.`;
     }
 
+    // ── STATE VARIABLES FOR COUNTRY ANALYTICS & PAGINATION ──
+    let currentCountryName = '';
+    let currentCountryTracks = [];
+    let currentCountryPage = 1;
+    let currentCountryPageSize = 6;
+    let currentCountryDetails = null;
+    let currentSelectedYears = new Set();
+
     async function openCountryTracksList(countryName, totalStream, totalTrack) {
+      if (!countryName) return;
+      currentCountryName = countryName;
+      currentCountryPage = 1;
+      currentSelectedYears.clear();
+
+      // Hide global country rankings card so detailed country analytics takes focus
+      const defaultCard = document.getElementById('country-default-rankings-card');
+      if (defaultCard) defaultCard.style.display = 'none';
+
       const panel = document.getElementById('country-tracks-panel');
       panel.style.display = 'block';
-      document.getElementById('country-panel-title').innerHTML = `${getCountryFlag(countryName)} Track Catalog in <strong>${escapeHtml(countryName)}</strong> (${(totalTrack || 0).toLocaleString()} tracks · ${fmtStream(totalStream)} streams)`;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      const tblContainer = document.getElementById('country-tracks-table');
-      tblContainer.innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Loading track catalog...</div>';
+      document.getElementById('country-panel-title').innerHTML = `${getCountryFlag(countryName)} Market & Track Explorer: <strong>${escapeHtml(countryName)}</strong>`;
+      document.getElementById('country-panel-subtitle').textContent = `Comprehensive music analytics and interactive track list for ${countryName}`;
 
+      // Reset KPIs with initial values from map
+      document.getElementById('ckpi-tracks').textContent = (totalTrack || 0).toLocaleString();
+      document.getElementById('ckpi-streams').textContent = fmtStream(totalStream || 0);
+      document.getElementById('ckpi-pop').textContent = '—';
+      document.getElementById('ckpi-eff').textContent = totalTrack ? `${fmtStream(Math.round(totalStream / totalTrack))}/trk` : '—';
+
+      // Set loading state for table
+      document.getElementById('country-tracks-table').innerHTML = '<div class="loader-box"><div class="spin-ring"></div>&nbsp;Loading country tracks...</div>';
+
+      // Parallel fetch: Country Details (Charts & KPIs) & Country Tracks (Paginated Catalog)
+      await Promise.allSettled([
+        loadCountryDetails(countryName),
+        loadCountryTracks(countryName)
+      ]);
+    }
+
+    async function loadCountryDetails(countryName, yearsParam = '') {
+      const comboChartEl = document.getElementById('country-chart-year-combo');
+      comboChartEl.innerHTML = '<div class="loader-box" style="height:200px;"><div class="spin-ring"></div>&nbsp;Loading historical trends...</div>';
+
+      try {
+        let url = `${API}/countrydetails?country=${encodeURIComponent(countryName)}&top=6`;
+        if (yearsParam) {
+          url += `&years=${encodeURIComponent(yearsParam)}`;
+        }
+        const res = await fetchApi(url);
+        const data = await res.json();
+        if (data.error) {
+          comboChartEl.innerHTML = `<div class="empty-state"><p>${escapeHtml(data.error)}</p></div>`;
+          return;
+        }
+        currentCountryDetails = data;
+
+        // Update Overview KPIs with high precision
+        if (data.overview) {
+          document.getElementById('ckpi-tracks').textContent = (data.overview.total_track || 0).toLocaleString();
+          document.getElementById('ckpi-streams').textContent = fmtStream(data.overview.total_stream || 0);
+          document.getElementById('ckpi-pop').textContent = `${data.overview.average_popularity || 0} ⭐`;
+          const eff = data.overview.total_track ? Math.round(data.overview.total_stream / data.overview.total_track) : 0;
+          document.getElementById('ckpi-eff').textContent = `${fmtStream(eff)}/trk`;
+        }
+
+        // Render Year Pills if this was an unfiltered query (to preserve full year list)
+        if (!yearsParam) {
+          renderYearPills(data.overview ? (data.overview.available_years || []) : []);
+        }
+
+        // Render Charts
+        renderCountryYearComboChart(data.years_of_release || []);
+        renderCountryGenreChart(data.top_genre || []);
+        renderCountryArtistChart(data.artists_numbers || []);
+        renderCountryAlbumChart(data.albums_numbers || []);
+
+      } catch (err) {
+        comboChartEl.innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`;
+      }
+    }
+
+    function renderYearPills(years) {
+      const container = document.getElementById('country-year-pills');
+      if (!years || !years.length) {
+        container.innerHTML = '<span style="font-size:12px;color:var(--t3);">No year data available</span>';
+        return;
+      }
+
+      const isAllActive = (currentSelectedYears.size === 0);
+      let html = `
+        <button class="year-pill-btn ${isAllActive ? 'active' : ''}" onclick="selectCountryYear('all')">
+          🌐 All Years (${years.length})
+        </button>
+      `;
+
+      years.forEach(yr => {
+        const active = currentSelectedYears.has(yr) ? 'active' : '';
+        html += `
+          <button class="year-pill-btn ${active}" onclick="selectCountryYear(${yr})">
+            ${yr}
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    async function selectCountryYear(year) {
+      if (year === 'all') {
+        currentSelectedYears.clear();
+      } else {
+        const numYr = parseInt(year);
+        if (currentSelectedYears.has(numYr)) {
+          currentSelectedYears.delete(numYr);
+        } else {
+          currentSelectedYears.add(numYr);
+        }
+      }
+
+      // Update pills visual state
+      const pills = document.querySelectorAll('#country-year-pills .year-pill-btn');
+      const isAll = (currentSelectedYears.size === 0);
+      pills.forEach(p => {
+        const txt = p.textContent.trim();
+        if (txt.includes('All Years')) {
+          p.classList.toggle('active', isAll);
+        } else {
+          const yr = parseInt(txt);
+          p.classList.toggle('active', currentSelectedYears.has(yr));
+        }
+      });
+
+      // Re-fetch country details with selected years
+      const yearsParam = isAll ? '' : Array.from(currentSelectedYears).join(',');
+      await loadCountryDetails(currentCountryName, yearsParam);
+    }
+
+    function renderCountryYearComboChart(data) {
+      if (!data || !data.length) {
+        document.getElementById('country-chart-year-combo').innerHTML = '<div class="empty-state"><p>No release year statistics found</p></div>';
+        return;
+      }
+
+      const categories = data.map(d => String(d.release_year));
+      const trackCounts = data.map(d => +(d.track_count || 0));
+      const streamCounts = data.map(d => +(d.total_stream || 0));
+
+      Highcharts.chart('country-chart-year-combo', {
+        chart: {
+          backgroundColor: 'transparent',
+          style: { fontFamily: 'Inter, sans-serif' }
+        },
+        title: { text: null },
+        xAxis: [{
+          categories: categories,
+          crosshair: true,
+          labels: { style: { color: '#a1a1aa', fontSize: '12px' } },
+          lineColor: 'rgba(255,255,255,0.1)'
+        }],
+        yAxis: [{ // Primary yAxis for Track Count (Bars)
+          labels: {
+            format: '{value}',
+            style: { color: '#1db954' }
+          },
+          title: {
+            text: 'Tracks Released',
+            style: { color: '#1db954', fontWeight: '600' }
+          },
+          gridLineColor: 'rgba(255,255,255,0.06)'
+        }, { // Secondary yAxis for Total Streams (Line)
+          title: {
+            text: 'Total Streams',
+            style: { color: '#38bdf8', fontWeight: '600' }
+          },
+          labels: {
+            formatter: function() { return fmtStreamShort(this.value); },
+            style: { color: '#38bdf8' }
+          },
+          opposite: true,
+          gridLineWidth: 0
+        }],
+        tooltip: {
+          shared: true,
+          useHTML: true,
+          backgroundColor: '#161622',
+          borderColor: 'rgba(255,255,255,0.15)',
+          style: { color: '#fff' },
+          formatter: function() {
+            let s = `<div style="padding:4px;"><b style="font-size:13px;color:#fff;">Year ${this.x}</b><br/>`;
+            this.points.forEach(pt => {
+              const val = (pt.series.name === 'Total Streams') ? fmtStream(pt.y) : pt.y.toLocaleString() + ' tracks';
+              s += `<span style="color:${pt.color};">●</span> ${pt.series.name}: <b>${val}</b><br/>`;
+            });
+            s += '</div>';
+            return s;
+          }
+        },
+        legend: {
+          itemStyle: { color: '#a1a1aa' },
+          itemHoverStyle: { color: '#fff' }
+        },
+        series: [{
+          name: 'Track Count',
+          type: 'column',
+          yAxis: 0,
+          data: trackCounts,
+          color: '#1db954',
+          borderRadius: 4,
+          tooltip: { valueSuffix: ' tracks' }
+        }, {
+          name: 'Total Streams',
+          type: 'spline',
+          yAxis: 1,
+          data: streamCounts,
+          color: '#38bdf8',
+          lineWidth: 3,
+          marker: {
+            radius: 4,
+            fillColor: '#38bdf8',
+            lineWidth: 1,
+            lineColor: '#fff'
+          }
+        }],
+        credits: { enabled: false }
+      });
+    }
+
+    function renderCountryGenreChart(data) {
+      if (!data || !data.length) {
+        document.getElementById('country-chart-genre').innerHTML = '<div class="empty-state"><p>No genre data</p></div>';
+        return;
+      }
+      const seriesData = data.map(d => ({
+        name: d.genre,
+        y: +(d.track_count || 0),
+        streams: +(d.total_stream || 0)
+      }));
+
+      Highcharts.chart('country-chart-genre', {
+        chart: {
+          type: 'pie',
+          backgroundColor: 'transparent',
+          style: { fontFamily: 'Inter, sans-serif' }
+        },
+        title: { text: null },
+        plotOptions: {
+          pie: {
+            innerSize: '55%',
+            borderWidth: 2,
+            borderColor: '#131322',
+            colors: ['#1db954', '#8b5cf6', '#38bdf8', '#f59e0b', '#ec4899', '#a855f7', '#64748b'],
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+              style: { color: '#a1a1aa', fontSize: '11px', textOutline: 'none' }
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: '#161622',
+          borderColor: 'rgba(255,255,255,0.15)',
+          style: { color: '#fff' },
+          formatter: function() {
+            return `<b>${this.point.name}</b><br/>Tracks: <b>${this.point.y.toLocaleString()}</b> (${this.percentage.toFixed(1)}%)<br/>Streams: <b>${fmtStream(this.point.streams)}</b>`;
+          }
+        },
+        series: [{ name: 'Tracks', data: seriesData }],
+        credits: { enabled: false }
+      });
+    }
+
+    function renderCountryArtistChart(data) {
+      if (!data || !data.length) {
+        document.getElementById('country-chart-artist').innerHTML = '<div class="empty-state"><p>No artist data</p></div>';
+        return;
+      }
+      const categories = data.map(d => d.artist_name);
+      const trackCounts = data.map(d => +(d.track_count || 0));
+
+      Highcharts.chart('country-chart-artist', {
+        chart: {
+          type: 'bar',
+          backgroundColor: 'transparent',
+          style: { fontFamily: 'Inter, sans-serif' }
+        },
+        title: { text: null },
+        xAxis: {
+          categories: categories,
+          labels: { style: { color: '#a1a1aa', fontSize: '11px' } },
+          lineColor: 'rgba(255,255,255,0.1)'
+        },
+        yAxis: {
+          min: 0,
+          title: { text: 'Tracks', style: { color: '#a1a1aa' } },
+          gridLineColor: 'rgba(255,255,255,0.06)'
+        },
+        legend: { enabled: false },
+        tooltip: {
+          backgroundColor: '#161622',
+          borderColor: 'rgba(255,255,255,0.15)',
+          style: { color: '#fff' },
+          formatter: function() {
+            const item = data[this.point.index];
+            return `<b>${this.x}</b><br/>Tracks: <b>${this.y}</b><br/>Total Streams: <b>${fmtStream(item ? item.total_stream : 0)}</b>`;
+          }
+        },
+        series: [{
+          name: 'Tracks',
+          data: trackCounts,
+          color: '#8b5cf6',
+          borderRadius: 4
+        }],
+        credits: { enabled: false }
+      });
+    }
+
+    function renderCountryAlbumChart(data) {
+      if (!data || !data.length) {
+        document.getElementById('country-chart-album').innerHTML = '<div class="empty-state"><p>No album data</p></div>';
+        return;
+      }
+      const categories = data.map(d => d.album_name);
+      const trackCounts = data.map(d => +(d.track_count || 0));
+
+      Highcharts.chart('country-chart-album', {
+        chart: {
+          type: 'column',
+          backgroundColor: 'transparent',
+          style: { fontFamily: 'Inter, sans-serif' }
+        },
+        title: { text: null },
+        xAxis: {
+          categories: categories,
+          labels: {
+            rotation: -25,
+            style: { color: '#a1a1aa', fontSize: '10px' }
+          },
+          lineColor: 'rgba(255,255,255,0.1)'
+        },
+        yAxis: {
+          min: 0,
+          title: { text: 'Tracks', style: { color: '#a1a1aa' } },
+          gridLineColor: 'rgba(255,255,255,0.06)'
+        },
+        legend: { enabled: false },
+        tooltip: {
+          backgroundColor: '#161622',
+          borderColor: 'rgba(255,255,255,0.15)',
+          style: { color: '#fff' },
+          formatter: function() {
+            const item = data[this.point.index];
+            return `<b>${this.x}</b><br/>Tracks: <b>${this.y}</b><br/>Streams: <b>${fmtStream(item ? item.total_stream : 0)}</b>`;
+          }
+        },
+        series: [{
+          name: 'Tracks',
+          data: trackCounts,
+          color: '#f59e0b',
+          borderRadius: 4
+        }],
+        credits: { enabled: false }
+      });
+    }
+
+    async function loadCountryTracks(countryName) {
       try {
         const res = await fetchApi(`${API}/filter?country=${encodeURIComponent(countryName)}`);
         const data = await res.json();
         if (data.error) {
-          tblContainer.innerHTML = `<div class="empty-state"><p>${escapeHtml(data.error)}</p></div>`;
+          document.getElementById('country-tracks-table').innerHTML = `<div class="empty-state"><p>${escapeHtml(data.error)}</p></div>`;
+          document.getElementById('country-pagination-info').textContent = 'No tracks available';
+          document.getElementById('country-pagination-btns').innerHTML = '';
           return;
         }
-        const rows = Array.isArray(data) ? data : [];
-        tblContainer.innerHTML = buildTableHtml(rows);
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        currentCountryTracks = Array.isArray(data) ? data : [];
+        currentCountryPage = 1;
+        renderCountryTracksTable();
       } catch (err) {
-        tblContainer.innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`;
+        document.getElementById('country-tracks-table').innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`;
       }
+    }
+
+    function renderCountryTracksTable() {
+      const total = currentCountryTracks.length;
+      if (total === 0) {
+        document.getElementById('country-tracks-table').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No tracks found for this country.</p></div>';
+        document.getElementById('country-pagination-info').textContent = 'Showing 0 of 0 tracks';
+        document.getElementById('country-pagination-btns').innerHTML = '';
+        return;
+      }
+
+      const totalPages = Math.ceil(total / currentCountryPageSize) || 1;
+      if (currentCountryPage < 1) currentCountryPage = 1;
+      if (currentCountryPage > totalPages) currentCountryPage = totalPages;
+
+      const start = (currentCountryPage - 1) * currentCountryPageSize;
+      const end = Math.min(start + currentCountryPageSize, total);
+      const slicedRows = currentCountryTracks.slice(start, end);
+
+      // Render Table
+      document.getElementById('country-tracks-table').innerHTML = buildTableHtml(slicedRows);
+
+      // Render Pagination Info & Buttons
+      document.getElementById('country-pagination-info').textContent = `Showing ${start + 1} – ${end} of ${total.toLocaleString()} tracks (Page ${currentCountryPage} of ${totalPages})`;
+
+      let btnsHtml = `
+        <button class="page-btn" onclick="changeCountryPage(${currentCountryPage - 1})" ${currentCountryPage <= 1 ? 'disabled' : ''}>
+          ‹ Prev
+        </button>
+      `;
+
+      // Window of page numbers
+      const maxButtons = 5;
+      let startPage = Math.max(1, currentCountryPage - Math.floor(maxButtons / 2));
+      let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+      if (endPage - startPage + 1 < maxButtons) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+
+      if (startPage > 1) {
+        btnsHtml += `<button class="page-btn" onclick="changeCountryPage(1)">1</button>`;
+        if (startPage > 2) btnsHtml += `<span style="color:var(--t3);padding:0 2px;">...</span>`;
+      }
+
+      for (let p = startPage; p <= endPage; p++) {
+        btnsHtml += `<button class="page-btn ${p === currentCountryPage ? 'active' : ''}" onclick="changeCountryPage(${p})">${p}</button>`;
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) btnsHtml += `<span style="color:var(--t3);padding:0 2px;">...</span>`;
+        btnsHtml += `<button class="page-btn" onclick="changeCountryPage(${totalPages})">${totalPages}</button>`;
+      }
+
+      btnsHtml += `
+        <button class="page-btn" onclick="changeCountryPage(${currentCountryPage + 1})" ${currentCountryPage >= totalPages ? 'disabled' : ''}>
+          Next ›
+        </button>
+      `;
+
+      document.getElementById('country-pagination-btns').innerHTML = btnsHtml;
+    }
+
+    function changeCountryPage(newPage) {
+      const totalPages = Math.ceil(currentCountryTracks.length / currentCountryPageSize) || 1;
+      if (newPage < 1 || newPage > totalPages) return;
+      currentCountryPage = newPage;
+      renderCountryTracksTable();
+    }
+
+    function changeCountryPageSize(newSize) {
+      currentCountryPageSize = parseInt(newSize) || 6;
+      currentCountryPage = 1;
+      renderCountryTracksTable();
     }
 
     function closeCountryPanel() {
       document.getElementById('country-tracks-panel').style.display = 'none';
+      const defaultCard = document.getElementById('country-default-rankings-card');
+      if (defaultCard) {
+        defaultCard.style.display = 'block';
+        renderCountryTopChart();
+        defaultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
+
 
     // ── TAB 6: STATISTICS TAB (QUARTERS & TOP COUNTRIES) ──
     async function fetchAndRenderQuarterStats() {
@@ -3424,19 +4157,21 @@
     async function initiateAddSong() {
       const name = document.getElementById('new-name').value.trim();
       const artist = document.getElementById('new-artist').value.trim();
+      const date = document.getElementById('new-date').value;
       const genre = document.getElementById('new-genre').value.trim();
       const label = document.getElementById('new-label').value.trim();
       const country = document.getElementById('new-country').value.trim();
+      const album = (document.getElementById('new-album') ? document.getElementById('new-album').value.trim() : '');
       const loudness = document.getElementById('new-loudness').value;
-      const date = document.getElementById('new-date').value;
+      const streamVal = document.getElementById('new-stream').value.trim();
+      const popVal = document.getElementById('new-pop').value.trim();
+      const durMin = parseInt(document.getElementById('new-dur-min').value) || 0;
+      const durSec = parseInt(document.getElementById('new-dur-sec').value) || 0;
+      const computedDurationMs = (durMin * 60 + durSec) * 1000;
 
       const missing = [];
       if (!name) missing.push('Track Name');
       if (!artist) missing.push('Artist');
-      if (!genre) missing.push('Genre');
-      if (!label) missing.push('Record Label');
-      if (!country) missing.push('Country');
-      if (!loudness) missing.push('Loudness Category');
       if (!date) missing.push('Release Date');
 
       if (missing.length) {
@@ -3447,20 +4182,27 @@
       const payload = {
         track_name: name,
         artist_name: artist,
-        genre: genre,
-        label: label,
-        country: country,
-        loudness_category: loudness,
         release_date: date,
-        stream_count: parseInt(document.getElementById('new-stream').value) || 1000,
-        popularity: parseInt(document.getElementById('new-pop').value) || 50,
-        duration_ms: parseInt(document.getElementById('new-duration').value) || 240000
+        genre: genre || 'Unknown',
+        label: label || 'Independent',
+        country: country || 'Unknown',
+        album_name: album || '',
+        loudness_category: loudness || 'Moderate',
+        stream_count: streamVal !== '' ? parseInt(streamVal) : 1000,
+        popularity: popVal !== '' ? parseInt(popVal) : 50,
+        duration_ms: computedDurationMs
       };
+
+      const genreDisplay = genre ? escapeHtml(genre) : 'Unknown';
+      const labelDisplay = label ? escapeHtml(label) : 'Independent';
+      const countryDisplay = country ? escapeHtml(country) : 'Unknown';
+      const durDisplay = computedDurationMs > 0 ? ` · ⏱️ ${formatDuration(computedDurationMs)}` : '';
 
       const confirmHtml = `
     Add new track to library:<br/>
     <strong style="color:var(--green);font-size:15px;">🎵 ${escapeHtml(name)}</strong><br/>
-    By: <strong>${escapeHtml(artist)}</strong> · ${escapeHtml(genre)} (${escapeHtml(country)})
+    By: <strong>${escapeHtml(artist)}</strong> · ${genreDisplay} (${labelDisplay} · 🌍 ${countryDisplay})<br/>
+    <span style="font-size:12px;color:var(--t3);">Release Date: ${escapeHtml(date)}${durDisplay}</span>
   `;
 
       const confirmed = await triggerModal('➕', 'Confirm Add Track', confirmHtml, 'Confirm Add', false);
@@ -3483,15 +4225,19 @@
         updateOverviewStatCards();
         renderRankingChart();
         renderGenreChart();
+        if (typeof renderCountryTopChart === 'function') renderCountryTopChart();
       } catch (err) {
         showToast('Error adding track: ' + err.message, 'error');
       }
     }
 
     function resetAddSongForm() {
-      ['new-name', 'new-artist', 'new-genre', 'new-label', 'new-country', 'new-date', 'new-stream', 'new-pop', 'new-duration']
-        .forEach(id => document.getElementById(id).value = '');
-      document.getElementById('new-loudness').value = '';
+      ['new-name', 'new-artist', 'new-genre', 'new-label', 'new-country', 'new-album', 'new-date', 'new-stream', 'new-pop', 'new-dur-min', 'new-dur-sec']
+        .forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+      document.getElementById('new-loudness').value = 'Moderate';
     }
 
     function toggleDelMode() {
@@ -3561,7 +4307,7 @@
     <div class="track-preview-card" style="border-color:rgba(239,68,68,0.4);">
       <div>
         <div class="tpc-main">🎵 ${escapeHtml(track.track_name)}</div>
-        <div class="tpc-sub">${escapeHtml(track.artist_name)} · <strong>${track.track_id}</strong> · ${escapeHtml(track.genre || '')}</div>
+        <div class="tpc-sub">${escapeHtml(track.artist_name)} · <strong>${track.track_id}</strong> · ${escapeHtml(track.genre || 'Unknown')} · ⏱️ ${formatDuration(track.duration_ms)}</div>
       </div>
       <button class="btn btn-danger" onclick="executeDelete('${track.track_id}', '${escapeHtml(track.track_name)}')">🗑️ Delete this track</button>
     </div>
@@ -3623,6 +4369,7 @@
           <th>Track Name</th>
           <th>Artist</th>
           <th>Genre</th>
+          <th>Duration</th>
           <th>Record Label</th>
           <th>Country</th>
           <th>Release Date</th>
@@ -3637,6 +4384,7 @@
             <td><strong>${escapeHtml(String(r.track_name || '—'))}</strong></td>
             <td>${escapeHtml(String(r.artist_name || '—'))}</td>
             <td><span class="badge badge-purple">${escapeHtml(String(r.genre || '—'))}</span></td>
+            <td><span class="badge badge-blue">⏱️ ${formatDuration(r.duration_ms)}</span></td>
             <td>${escapeHtml(String(r.label || '—'))}</td>
             <td>${getCountryFlag(r.country)} ${escapeHtml(String(r.country || '—'))}</td>
             <td>${escapeHtml(String(r.release_date || r.release_year || '—'))}</td>
