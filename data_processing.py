@@ -1,5 +1,8 @@
+import os
 import pandas as pd 
-df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+df = pd.read_csv(os.path.join(BASE_DIR, 'spotify_data_processed.csv'))
 
 # Get list of all tracks (payload optimized)
 def get_all_track(df: pd.DataFrame):

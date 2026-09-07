@@ -4,7 +4,11 @@ from flask_compress import Compress
 import pandas as pd 
 import os
 
-df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
+# ── Cấu hình đường dẫn động (Dynamic Path) ──
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, 'spotify_data_processed.csv')
+
+df = pd.read_csv(CSV_FILE)
 
 app = Flask(__name__)
 CORS(app)
@@ -13,8 +17,7 @@ Compress(app)
 # Serve dashboard at root URL
 @app.route('/')
 def dashboard():
-    folder = os.path.dirname(os.path.abspath(__file__))
-    return send_from_directory(folder, 'dashboard.html')
+    return send_from_directory(BASE_DIR, 'dashboard.html')
 
 from data_processing import (get_all_track, 
                         filter_by_artist, 
@@ -44,7 +47,8 @@ from data_handle import (create_new_track,
 from data_ultilize import (label_stream_count,
                     label_artist,
                     label_track_count,
-                    country_details
+                    country_details,
+                    label_details
                     )
 
 # Helper function to serialize DataFrame rows safely for JSON
@@ -207,7 +211,7 @@ def add():
         return jsonify({'error': str(e)}), 500
     
     df = pd.concat([df, pd.DataFrame([new_song])], ignore_index = True)
-    df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
+    df.to_csv(CSV_FILE, index = False)
     return jsonify({'message': 'Track added successfully', 'track': new_song}), 201
 
 
@@ -233,7 +237,7 @@ def remove():
             return jsonify(remove_song), status_code
 
         df = remove_song
-        df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
+        df.to_csv(CSV_FILE, index = False)
         return jsonify({'message': 'Track deleted successfully'}), 200
 
     except Exception as e:
@@ -408,7 +412,8 @@ def country_data():
         return jsonify({'error': str(e)}), 500
 
 
-# Country detailed statistics: overview, top genres, artists, albums, and release years stats
+
+# Country detailed statistics
 @app.route('/api/countrydetails')
 def country_details_api():
     try:
@@ -426,7 +431,25 @@ def country_details_api():
         return jsonify({'error': str(e)}), 500
 
 
-df.to_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv', index = False)
+# Record label detailed statistics
+@app.route('/api/labeldetails')
+def label_details_api():
+    try:
+        label = request.args.get('label', default = '', type = str)
+        top = request.args.get('top', default = 5, type = int)
+        years = request.args.get('years', type = str) or request.args.get('year', type = str)
+
+        result = label_details(df, label = label, top = top, years = years)
+        if isinstance(result, dict) and 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+df.to_csv(CSV_FILE, index = False)
 
 
 

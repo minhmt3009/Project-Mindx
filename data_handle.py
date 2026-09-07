@@ -1,6 +1,9 @@
+import os
 import pandas as pd
-df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
 from datetime import date
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+df = pd.read_csv(os.path.join(BASE_DIR, 'spotify_data_processed.csv'))
 
 # Auto-generate new track ID
 def new_trackid(df: pd.DataFrame):
@@ -241,8 +244,7 @@ def month_track_count(df: pd.DataFrame):
     return quartercount.to_dict(orient = 'records')
 
 
-
-# Statistics by country
+# Statistics by country (for Heat Map & Global Country Analytics)
 def country_stats(df: pd.DataFrame):
     stats = (df.groupby('country')
         .agg(
@@ -254,3 +256,5 @@ def country_stats(df: pd.DataFrame):
         .reset_index(drop = True)
     )
     return stats.to_dict(orient = 'records')
+
+

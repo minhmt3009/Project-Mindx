@@ -1,5 +1,8 @@
+import os
 import pandas as pd
-df = pd.read_csv(r'D:\Data Science\Project cuối khóa 1 Mindx\spotify_data_processed.csv')
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+df = pd.read_csv(os.path.join(BASE_DIR, 'spotify_data_processed.csv'))
 
 
 # Count number of tracks per record label
@@ -153,5 +156,124 @@ def country_details(df: pd.DataFrame, country: str, top: int = 5, years = None):
         'top_genre': top_genre,
         'artists_numbers': artists_numbers,
         'albums_numbers': albums_numbers,
+        'years_of_release': years_of_release_records
+    }
+
+
+# Get detailed statistics for a specific record label
+def label_details(df: pd.DataFrame, label: str, top: int = 5, years = None):
+
+    if not label or not isinstance(label, str) or not label.strip():
+        return {'error': 'Label name is required'}
+
+    label_clean = label.strip()
+    sub = df[df['label'].astype(str).str.lower() == label_clean.lower()]
+
+    if sub.empty:
+        return {'error': f'No data found for record label: {label_clean}'}
+
+    all_years = sorted([int(y) for y in sub['release_year'].dropna().unique()])
+
+    selected_years = None
+    if years is not None and str(years).strip() != '' and str(years).strip().lower() != 'all':
+        if isinstance(years, (int, float)):
+            selected_years = [int(years)]
+        elif isinstance(years, str):
+            parsed = []
+            for item in years.split(','):
+                item = item.strip()
+                if item.isdigit():
+                    parsed.append(int(item))
+            if parsed:
+                selected_years = parsed
+        elif isinstance(years, (list, tuple)):
+            selected_years = [int(y) for y in years if str(y).isdigit()]
+
+    total_track = int(len(sub))
+    total_stream = int(sub['stream_count'].sum())
+    total_artist = int(sub['artist_name'].nunique())
+    avg_pop = round(float(sub['popularity'].mean()), 1)
+    eff = round(total_stream / total_track) if total_track > 0 else 0
+
+    # Overview
+    overview = {
+        'label': str(sub['label'].iloc[0]),
+        'total_track': total_track,
+        'total_stream': total_stream,
+        'total_artist': total_artist,
+        'average_popularity': avg_pop,
+        'stream_efficiency': eff,
+        'available_years': all_years
+    }
+
+    # Top genres
+    top_genre = (sub.groupby('genre')
+        .agg(
+            track_count=('track_id', 'count'),
+            total_stream=('stream_count', 'sum')
+        )
+        .reset_index()
+        .sort_values('total_stream', ascending=False)
+        .head(top)
+        .to_dict(orient='records')
+    )
+
+    # Top artists
+    top_artists = (sub.groupby('artist_name')
+        .agg(
+            track_count=('track_id', 'nunique'),
+            total_stream=('stream_count', 'sum'),
+            avg_pop=('popularity', 'mean')
+        )
+        .reset_index()
+        .sort_values('total_stream', ascending=False)
+        .head(top)
+    )
+    top_artists['avg_pop'] = top_artists['avg_pop'].round(1)
+    artists_records = top_artists.to_dict(orient='records')
+
+    cols_track = ['track_id', 'track_name', 'artist_name', 'album_name', 'release_year', 'stream_count', 'popularity', 'genre']
+    top_tracks = (sub.sort_values('stream_count', ascending=False)
+        .head(top)[cols_track]
+        .to_dict(orient='records')
+    )
+
+    # Top countries
+    top_countries = (sub.groupby('country')
+        .agg(
+            track_count=('track_id', 'count'),
+            total_stream=('stream_count', 'sum')
+        )
+        .reset_index()
+        .sort_values('total_stream', ascending=False)
+        .head(top)
+        .to_dict(orient='records')
+    )
+
+    # Release years stats
+    year_target = sub
+    if selected_years:
+        matched = sub[sub['release_year'].isin(selected_years)]
+        if not matched.empty:
+            year_target = matched
+
+    years_of_release = (year_target.groupby('release_year')
+        .agg(
+            track_count=('track_id', 'nunique'),
+            total_stream=('stream_count', 'sum'),
+            avg_popularity=('popularity', 'mean')
+        )
+        .reset_index()
+        .sort_values('release_year', ascending=True)
+    )
+    years_of_release['avg_popularity'] = years_of_release['avg_popularity'].round(1)
+    years_of_release_records = years_of_release.to_dict(orient='records')
+
+    return {
+        'overview': overview,
+        'top_genre': top_genre,
+        'artists_numbers': artists_records,
+        'top_tracks': top_tracks,
+        'top_countries': top_countries,
         'years_of_release': years_of_release_records
     }
