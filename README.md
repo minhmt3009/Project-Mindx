@@ -51,7 +51,7 @@ Dashboard được chia thành nhiều khu vực chức năng:
 
 Dự án sử dụng một file dữ liệu bài hát Spotify ở định dạng **CSV** (`spotify_data_processed.csv`), với các thông tin cho mỗi bài hát như: mã bài hát, tên bài hát, nghệ sĩ, thể loại, quốc gia, hãng đĩa, ngày phát hành, độ ồn, độ phổ biến, số lượt nghe (stream count)...
 
-> **Lưu ý:** Hiện tại đường dẫn tới file dữ liệu đang được ghi cố định trong code. Nếu chạy trên máy khác, cần đổi đường dẫn này cho khớp với vị trí lưu file CSV trên máy đó.
+> **Điểm nổi bật về đường dẫn (Dynamic Path):** Hệ thống đã được nâng cấp sử dụng **đường dẫn động tự động** (`BASE_DIR = os.path.dirname(os.path.abspath(__file__))`). Dữ liệu được xác định tự động ngay trong thư mục dự án, cho phép bạn sao chép toàn bộ thư mục sang bất kỳ máy tính nào (ổ C, D, Linux hay macOS) là có thể chạy được ngay mà **không cần phải sửa lại đường dẫn thủ công**. Mọi thao tác thêm/xóa bài hát cũng tự động cập nhật đồng bộ vào đúng file này.
 
 
 
@@ -72,54 +72,56 @@ pip install pandas flask flask-cors flask-compress
 
 ## 6. Cách chạy dự án
 
-1. Đảm bảo file dữ liệu CSV đã có sẵn đúng đường dẫn được khai báo trong các file `.py`.
-2. Mở terminal (cửa sổ dòng lệnh) tại thư mục chứa dự án hoặc sử dụng IDE.
+1. Đặt file dữ liệu `spotify_data_processed.csv` chung thư mục với `main.py` (hệ thống tự nhận diện).
+2. Mở terminal (cửa sổ dòng lệnh) tại thư mục dự án (hoặc mở trực tiếp bằng IDE như VS Code / Antigravity).
 3. Chạy lệnh:
 
    ```bash
    python main.py
    ```
-  hoặc chạy trực tiếp trên IDE
 4. Khi thấy máy chủ khởi động thành công, mở trình duyệt web và truy cập:
 
    ```
    http://localhost:8888
    ```
 
-5. Dashboard sẽ hiện ra, có thể bắt đầu xem, tìm kiếm, lọc và thống kê dữ liệu.
+5. Dashboard sẽ hiển thị trực quan, bạn có thể bắt đầu xem, tìm kiếm, lọc, phân tích nhãn đĩa, bản đồ thế giới và quản lý bài hát.
 
+6. **Chia sẻ ra bên ngoài (Tùy chọn):** Để người khác từ xa có thể xem dashboard của bạn, có thể public qua công cụ tunnel như ngrok:
 
-
-6. Để users khác có thể xem trang web, public qua các phần mềm như: ngrok,...
-
-   cú pháp public: "ngrok http localhost:8888"
+   ```bash
+   ngrok http 8888
+   ```
 
    
 ## 7. Danh sách các "cửa ngõ" dữ liệu (API) cho ai muốn tìm hiểu sâu hơn
 
-Đây là các đường dẫn mà dashboard gọi tới để lấy dữ liệu (không cần quan tâm nếu chỉ dùng dashboard):
+Đây là các endpoint API mà dashboard gọi tới để lấy dữ liệu:
 
 | Đường dẫn | Chức năng |
 |---|---|
 | `/api/all` | Lấy toàn bộ dữ liệu, có phân trang |
 | `/api/summary` | Lấy danh sách bài hát rút gọn |
-| `/api/filter` | Lọc theo nhiều tiêu chí (thể loại, nghệ sĩ, năm, hãng, quốc gia, độ ồn) |
+| `/api/filter` | Lọc theo nhiều tiêu chí (thể loại, nghệ sĩ, năm, hãng đĩa, quốc gia, độ ồn) |
 | `/api/search` | Tìm theo mã bài hát hoặc tên bài hát |
-| `/api/new` | Thêm bài hát mới |
-| `/api/remove` | Xóa bài hát |
+| `/api/suggest` | Gợi ý bài hát tự động (Autocomplete) |
+| `/api/new` | Thêm bài hát mới vào hệ thống |
+| `/api/remove` | Xóa bài hát theo ID hoặc tên bài hát |
 | `/api/streamcount` | Top bài hát có lượt nghe cao/thấp nhất |
 | `/api/popular` | Top bài hát phổ biến nhất |
 | `/api/genrecountcrank` | Xếp hạng tổng lượt nghe theo thể loại |
-| `/api/yearcountrank` | Tổng lượt nghe theo năm |
-| `/api/poprank` | Độ phổ biến trung bình theo thể loại + phân loại |
-| `/api/quarterrank` | Số bài hát phát hành theo quý |
-| `/api/label1`, `/api/label2`, `/api/label3` | Số bài hát / tổng lượt nghe / số nghệ sĩ theo từng hãng đĩa |
-| `/api/countrystats` | Thống kê số bài hát và lượt nghe theo quốc gia |
+| `/api/yearcountrank` | Tổng lượt nghe theo năm phát hành |
+| `/api/poprank` | Độ phổ biến trung bình theo thể loại + phân loại cấp bậc |
+| `/api/quarterrank` | Số bài hát phát hành theo từng quý trong năm |
+| `/api/label1`, `/api/label2`, `/api/label3` | Thống kê hãng đĩa: số bài hát / tổng lượt nghe / số nghệ sĩ |
+| `/api/labeldetails` | **Hồ sơ chuyên sâu nhãn đĩa:** KPIs, top nghệ sĩ, thể loại, hit tracks, quốc gia và xu hướng phát hành |
+| `/api/countrystats` | Thống kê số bài hát và lượt nghe tổng hợp theo quốc gia (cho bản đồ nhiệt) |
+| `/api/countrydetails` | **Phân tích chuyên sâu quốc gia:** KPIs, top nghệ sĩ, album, thể loại và xu hướng năm |
 
 
 
 ## 8. Một số điểm cần lưu ý / hướng cải thiện trong tương lai
 
-- Đường dẫn tới file CSV hiện đang cố định (hardcode), nên cân nhắc chuyển thành đường dẫn tương đối hoặc đọc từ file cấu hình để dễ chia sẻ dự án cho người khác chạy.
-- Dữ liệu bài hát mới thêm/xóa hiện chỉ lưu trực tiếp vào file csv gốc.
-- Có thể mở rộng thêm các thống kê khác (ví dụ theo mùa phát hành nhạc, theo mối liên hệ giữa độ ồn và độ phổ biến...) trong tương lai.
+- **Đường dẫn động (Đã hoàn thành):** Đã chuẩn hóa toàn bộ đường dẫn thành động (`BASE_DIR` + `os.path.join`), đảm bảo tính linh hoạt 100% khi di chuyển mã nguồn giữa các môi trường khác nhau.
+- **Lưu trữ dữ liệu:** Thao tác thêm/xóa bài hát hiện lưu trực tiếp vào file CSV gốc. Trong tương lai có thể nâng cấp sang cơ sở dữ liệu như SQLite hoặc PostgreSQL để tăng tốc độ truy vấn đồng thời.
+- **Mở rộng tính năng:** Có thể bổ sung thêm các thuật toán gợi ý nhạc tương đồng (Content-Based Recommendation), phân tích âm hưởng nâng cao (Energy, Danceability, Valence).
