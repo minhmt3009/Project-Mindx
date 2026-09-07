@@ -4,7 +4,7 @@ from flask_compress import Compress
 import pandas as pd 
 import os
 
-# ── Cấu hình đường dẫn động (Dynamic Path) ──
+# ── Dynamic Path Configuration ──
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_FILE = os.path.join(BASE_DIR, 'spotify_data_processed.csv')
 
